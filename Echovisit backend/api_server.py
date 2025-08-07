@@ -1,5 +1,5 @@
 # api_server.py
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from watsonx_agent import run_prompt
 import json
 
@@ -92,14 +92,13 @@ def simplify_transcript():
 
             Please rewrite the following conversation or notes in simple, plain English for a patient with no medical background.
 
-            Instructions:
             - DO NOT repeat or quote the original conversation
             - DO NOT include any headings, titles, or extra formatting
             - Use short, simple sentences
             - Keep it friendly and reassuring
             - Aim for a 6th-grade reading level
             - Focus ONLY on the important information the patient needs
-            - Make it no longer than 3–5 sentences unless absolutely necessary
+            - DO NOT make it longer than 3–5 sentences unless absolutely necessary
 
             Here is the original text:
             {transcript}
@@ -111,6 +110,40 @@ def simplify_transcript():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+# LANGUAGE TRANSLATION - translates from english to target language based on users selection
+@app.route('/translate', methods=['POST'])
+def lang_translation():
+    data = request.get_json()
+    transcript = data.get('transcript', '')
+    language = data.get('language', '')
+
+    if not transcript or not language:
+        return jsonify({'error': 'Both transcript and target language are required'}), 400
+    
+    translation_prompt = f"""You are a helpful medical assistant who translates medical conversations for patients.
+
+            Translate the following into {language}. Use plain, patient-friendly language that someone without medical training can understand.
+
+            Only return the translated version. 
+
+            - DO NOT include the language name (like "Spanish" or "(Spanish)")
+            - DO NOT include section headers like "Translation:" or "Response:"
+            - DO NOT include the original English
+            - ONLY return the translated version
+
+            Text:
+            {transcript}
+            """
+    try:
+        result = run_prompt(translation_prompt)
+        translated = result.strip()
+        return Response(
+                json.dumps({"translation": translated}, ensure_ascii=False),
+                mimetype='application/json'
+            )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
