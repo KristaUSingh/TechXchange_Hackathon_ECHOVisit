@@ -102,7 +102,7 @@ def summarize_transcript(transcript):
         return {"raw_output": generated}
 
 # Additional logic
-def simplify_summary(summary):
+def simplify_summary(transcript):
     API_KEY = os.getenv("WATSONX_API_KEY")
     PROJECT_ID = os.getenv("WATSONX_PROJECT_ID")
     MODEL_ID = "ibm/granite-3-3-8b-instruct"
@@ -117,8 +117,6 @@ def simplify_summary(summary):
         "Content-Type": "application/json"
     }
 
-    # Format the summary dictionary into readable text
-    summary_text = json.dumps(summary, indent=2)
 
     prompt = f"""
     You are a medical assistant that simplifies complex medical summaries into easy-to-understand language for patients and caregivers.
@@ -139,7 +137,7 @@ def simplify_summary(summary):
     The girl doesn't have any known allergies to medicines, and her vaccinations are up-to-date.”
 
     Input:
-    {summary_text}
+    {transcript}
 
     Output:
     """
@@ -151,6 +149,8 @@ def simplify_summary(summary):
         "parameters": {
             "decoding_method": "greedy",
             "max_new_tokens": 300,
+            "stop_sequences": ["\n\n"]
+            
         }
     }
 
@@ -165,11 +165,11 @@ def simplify_summary(summary):
         return "Could not simplify summary"
 
     generated = response.json().get("results", [{}])[0].get("generated_text", "")
-    cleaned = generated.strip().split("Input:")[0].strip().strip('"""')
-    return cleaned
+    cleaned_text = generated.strip().strip('`').strip()
+    return cleaned_text
 
 
-def translation_summary(summary, target_lang="spanish"):
+def translation_summary(text, target_lang="spanish"):
     API_KEY = os.getenv("WATSONX_API_KEY")
     PROJECT_ID = os.getenv("WATSONX_PROJECT_ID")
     MODEL_ID = "ibm/granite-3-3-8b-instruct"
@@ -184,21 +184,13 @@ def translation_summary(summary, target_lang="spanish"):
         "Content-Type": "application/json"
     }
 
-    # Create a readable English version of the summary
-    english_summary = f"""Summary:
-    Symptoms: {', '.join(summary.get('Symptoms', [])) if isinstance(summary.get('Symptoms'), list) else summary.get('Symptoms')}
-    Diagnosis: {summary.get('Diagnosis')}
-    Medications: {summary.get('Medications')}
-    Instructions: {', '.join(summary.get('Instructions', [])) if isinstance(summary.get('Instructions'), list) else summary.get('Instructions')}
-    Additional Notes: {', '.join(summary.get('Additional Notes', [])) if isinstance(summary.get('Additional Notes'), list) else summary.get('Additional Notes')}
-    """
 
     prompt = f"""
     Translate this message into {target_lang}. If there is not a translation for a certain medical term, leave the word in English.
 
 
     Input:
-    {english_summary}
+    {text}
 
     Output: 
     """
@@ -317,8 +309,8 @@ def questions_suggestions(summary):
 # Final pipeline
 def process_transcript(transcript):
     summary = summarize_transcript(transcript)
-    simplified = simplify_summary(summary)
-    translated = translation_summary(summary, target_lang="spanish")
+    simplified = simplify_summary(transcript)
+    translated = translation_summary(simplified, target_lang="spanish")
     questions = questions_suggestions(summary)
 
     return {
