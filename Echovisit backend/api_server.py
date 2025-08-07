@@ -145,5 +145,34 @@ def lang_translation():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# FOLLOW-UP QUESTIONS - suggest 3 questions the patient should ask the doctor
+@app.route('/followup', methods=['POST'])
+def followup_questions():
+    data = request.get_json()
+    transcript = data.get('transcript', '')
+
+    if not transcript:
+        return jsonify({'error': 'Transcript is required'}), 400
+    
+    followup_prompt = f""" You are a helpful medical assistant.
+
+            Based on the following doctor-patient conversation or medical notes, generate 2 to 4 simple follow-up questions the patient might want to ask next. 
+
+            Guidelines:
+            - Questions should be short, natural, and patient-friendly.
+            - Avoid technical medical terms or long sentences.
+            - Don't include section titles or commentary, just return the list.
+
+            Transcript:
+            {transcript}
+
+            """
+    try:
+        result = run_prompt(followup_prompt)
+        questions = [line.strip("- ").strip() for line in result.split("\n") if line.strip()]
+        return jsonify({"follow_up_questions": questions})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
