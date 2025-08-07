@@ -1,178 +1,44 @@
-# api_server.py
-from flask import Flask, request, jsonify, Response
-from watsonx_agent import run_prompt
-import json
+from flask import Flask, request, jsonify
+from watsonx_agent import process_transcript
+from flask_cors import CORS
+import whisper
+import os
 
+whisper_model = whisper.load_model("base")
 app = Flask("ECHOVisit")
+CORS(app)
 
-def extract_clean_json(raw_text):
-    try:
-        # Extract JSON block from the string
-        json_str = raw_text[raw_text.find('{'):raw_text.rfind('}') + 1]
-        parsed = json.loads(json_str)
-
-        # Replace nulls with "N/A"
-        def replace(obj):
-            if isinstance(obj, dict):
-                return {k: replace(v) for k, v in obj.items()}
-            if isinstance(obj, list):
-                return [replace(i) for i in obj]
-            return "N/A" if obj is None else obj
-
-        return replace(parsed)
-
-    except Exception as e:
-        raise ValueError(f"Failed to parse clean JSON: {e}")
+def transcribe_audio(file_path):
+    result = whisper_model.transcribe(file_path)
+    return result['text']
 
 
-@app.route('/ask', methods=['POST'])
-def ask_watsonx():
-    data = request.get_json()
-    user_prompt = data.get('prompt', '')
+def full_pipeline(audio_file_path):
+    transcript = transcribe_audio(audio_file_path)
+    result = process_transcript(transcript)
+    return {
+        "transcript": transcript,
+        **result
+    }
 
-    if not user_prompt:
-        return jsonify({'error': 'Prompt is required'}), 400
+@app.route("/transcribe", methods=["POST"])
+def transcribe_and_summarize():
+    if 'audio' not in request.files:
+        return jsonify({"error": "No audio file uploaded"}), 400
 
-    try:
-        result = run_prompt(user_prompt)
-        lines = [line.strip() for line in result.split("\n") if line.strip()]
-        return jsonify({"response": lines})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    audio = request.files['audio']
     
+    # Make sure temp folder exists
+    os.makedirs("temp", exist_ok=True)
 
-# SUMMARIZATION - symptoms, diagnosis, medications, instructions, additional notes
-@app.route('/summary', methods=['POST'])
-def summarize_transcript():
-    data = request.get_json()
-    transcript = data.get('transcript', '')
-
-    if not transcript:
-        return jsonify({'error': 'Transcript is required'}), 400
-
-    # Prompt format: summarization request for the transcript
-    summary_prompt = f"""You are a clinical summarization agent. 
-
-            From the provided doctor's notes, extract the following fields
-
-            - Symptoms
-            - Diagnosis
-            - Medications (list each med with dose and frequency)
-            - Instructions (any guidance for patient)
-            - Additional Notes (anything extra doctor mentioned)
-
-            DO NOT add extra information or assume anything about the patient that wasn't explicitly mentioned.
-            DO NOT assume extra follow-up instructions that the doctor didn't explicitly provide, even generic comments like "increase fluid intake"
-            DO NOT generate your own follow-up instructions if none are provided in the transcript.
-
-            - If any field is missing, return it as "N/A"
-            - Return only one single JSON object and nothing else
-
-            Conversation:
-            {transcript}
-            """
+    filepath = os.path.join("temp", audio.filename)
+    audio.save(filepath)
 
     try:
-        result = run_prompt(summary_prompt)
-        summary = extract_clean_json(result)
-        return jsonify({"summary": summary})
+        result = full_pipeline(filepath)
+        return jsonify(result)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
-# SIMPLIFICATION - someone with no medical background or knowledge:
-@app.route('/simplify', methods=['POST'])
-def simplify_transcript():
-    data = request.get_json()
-    transcript = data.get('transcript', '')
-
-    if not transcript:
-        return jsonify({'error': 'Transcript is required'}), 400
-    
-    simplify_prompt = f""" You are a medical assistant helping patients understand medical information.
-
-            Please rewrite the following conversation or notes in simple, plain English for a patient with no medical background.
-
-            - DO NOT repeat or quote the original conversation
-            - DO NOT include any headings, titles, or extra formatting
-            - Use short, simple sentences
-            - Keep it friendly and reassuring
-            - Aim for a 6th-grade reading level
-            - Focus ONLY on the important information the patient needs
-            - DO NOT make it longer than 3–5 sentences unless absolutely necessary
-
-            Here is the original text:
-            {transcript}
-            """
-    try:
-        result = run_prompt(simplify_prompt)
-        simplification = result.strip()
-        return jsonify({"simplified_t": simplification})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-# LANGUAGE TRANSLATION - translates from english to target language based on users selection
-@app.route('/translate', methods=['POST'])
-def lang_translation():
-    data = request.get_json()
-    transcript = data.get('transcript', '')
-    language = data.get('language', '')
-
-    if not transcript or not language:
-        return jsonify({'error': 'Both transcript and target language are required'}), 400
-    
-    translation_prompt = f"""You are a helpful medical assistant who translates medical conversations for patients.
-
-            Translate the following into {language}. Use plain, patient-friendly language that someone without medical training can understand.
-
-            Only return the translated version. 
-
-            - DO NOT include the language name (like "Spanish" or "(Spanish)")
-            - DO NOT include section headers like "Translation:" or "Response:"
-            - DO NOT include the original English
-            - ONLY return the translated version
-
-            Text:
-            {transcript}
-            """
-    try:
-        result = run_prompt(translation_prompt)
-        translated = result.strip()
-        return Response(
-                json.dumps({"translation": translated}, ensure_ascii=False),
-                mimetype='application/json'
-            )
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# FOLLOW-UP QUESTIONS - suggest 3 questions the patient should ask the doctor
-@app.route('/followup', methods=['POST'])
-def followup_questions():
-    data = request.get_json()
-    transcript = data.get('transcript', '')
-
-    if not transcript:
-        return jsonify({'error': 'Transcript is required'}), 400
-    
-    followup_prompt = f""" You are a helpful medical assistant.
-
-            Based on the following doctor-patient conversation or medical notes, generate 2 to 4 simple follow-up questions the patient might want to ask next. 
-
-            Guidelines:
-            - Questions should be short, natural, and patient-friendly.
-            - Avoid technical medical terms or long sentences.
-            - Don't include section titles or commentary, just return the list.
-
-            Transcript:
-            {transcript}
-
-            """
-    try:
-        result = run_prompt(followup_prompt)
-        questions = [line.strip("- ").strip() for line in result.split("\n") if line.strip()]
-        return jsonify({"follow_up_questions": questions})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
