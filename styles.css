@@ -1,0 +1,129 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #edf6f9;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+}
+
+header nav a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.get_started_button {
+  text-align: right;
+  padding: 20px 20px;
+  background-color: #f0cfcf;
+  font-size: 1.0em;
+  border: none;
+}
+
+.echo {
+  color: #7ebfb4;
+  font-weight: bold;
+  font-size: 2.5em;
+
+}
+.visit {
+  color: #27564d;
+  font-weight: bold;
+  font-size: 2.5em;
+}
+
+.echo-visit {
+  background-color: #ffffff;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10%;
+  padding-top: 10%;
+}
+
+.logo {
+  padding: left 5px;
+  width: 400px;
+  height: auto;
+
+}
+/*
+.hero h1 {
+  font-size: 4.0em;
+  color: #2a8a7a;
+}
+.hero2 h1 {
+  font-size: 4.0em;
+  color: #7e9f99;
+}
+*/
+
+
+.button {
+  background-color: #FFB8A8;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.section {
+  background-color: #A8DADC;
+  padding: 30px 30px;
+  padding: 5%;
+  font-family: monospace;
+  font-size: larger;
+  font-weight: 500;
+  line-height: 1.6;
+
+}
+.section h2 {
+  font-size: 2.0em;
+}
+
+.features {
+  background-color: #E6F1F3;
+  display: flex;
+  justify-content: space-around;
+  padding: 30px 20px;
+  flex-wrap: wrap;
+  line-height: 1.6;
+  font-family: monospace;
+  font-size: larger;
+
+
+}
+.features h3{
+  font-size: 1.5em;
+}
+.features div {
+  width: 45%;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+footer p {
+  margin: 8px 0;
+}
+
+footer a {
+  color: #fff;
+  text-decoration: underline;
+}
