@@ -1,5 +1,36 @@
-# IBMHackathon2025
+# TechXchange_Hackathon_ECHOVisit
+Explains the work done by our team **Beavers Intelligence Unit** for the **2025 IBM TechXchange Pre-Conference WatsonX Hackathon**. The goal of the hackathon is the use agentic AI to create an innovative solve to an everyday, real-world problem. This project was completed using Javascript, css, and html.
 
-# AI Agent for Doctor's Visit Summarization
-- A medical assistant agent who transcribes and explains doctor-patient conversations, summarizes diagnoses, and generates after-visit instructions.
-- Offers follow-up question suggestions and medical term simplification
+# Main Video
+# In-Depth Video
+
+# What is ECHOVisit? 
+**ECHOVisit is an AI Agent for Doctor's Visit Summarization** that is powered WatsonX AI's Granite models. It was designed to make doctor visits easier for both patients and healthcare providers. It is a web-based platform that helps patients better understand their visit summaries after appointments with their primary care physicians. It is built with two connected portals: one for doctors and one for patients. 
+
+
+# Why is ECHOVisit Useful?
+ECHOVisit is useful because it is an easy to navigate software for users of all ages and backgrounds. It allows for healthcare providers to take notes about their patients after appointments more efficiently by allowing them to record and edit their notes. These notes can then be made available to patients. ECHOVisit has a translation option for patients who struggle with English fluency because we believe that everyone should be in control of their health journey. In addition, patients can also ask questions to an AI agent for clarification about their condition and/or medical terms.  
+
+# Features
+## 1. Voice Recording
+- Healthcare providers can record their notes after appointments for maximum efficiency
+> Simple notes such as vitals can be typed into the portal
+## 2. Audio Transcription
+- A speech-to-text feature that provides a written form of the healthcare providers' notes
+## 3. Translation
+- Translates the notes provided to the patient into another language other than English if needed
+## 4. AI Agent
+- Extracts relevant information and organizes it into structured categories
+> Healthcare providers must review and approve it before the data can be viewed on the patient's portal
+- Patients will be provided an easy to understand summary of the notes from their visit
+- Patients will be provided with initial questions that they can ask
+- Patients can ask questions regarding anything pertaining to their health and doctor's visit
+> The conversation can be translated too!
+## 5. Health Flagging
+- The patient's **blood pressure** will be flagged if it is outside of a normal range
+- If medication that the patient was prescribed has any **drug interactions** with any medication that the patient is currently taking it will be flagged
+- The patient's **BMI** will be flagged if it is outside the normal or healthy range
+> Both healthcare providers and patients will have access to this information. However, the doctor can change this if necessary.
+
+# Conclusion
+ECHOVisit was an idea solely created for the 2025 IBM TechXchange Pre-Conference WatsonX Hackathon. However, we truly believe in its potential and want to build upon our initial ideas. We envision adding more features to improve its practicality and efficiency to further improve user experience. Overall, it was a great experience and challenge to build ECHOVisit up to this point.
