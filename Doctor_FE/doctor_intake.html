@@ -27,11 +27,11 @@
     <h1>WELCOME DR. ECHO!</h1>
     <p class="subtitle">Please enter the patient details below:</p>
 
-    <h2>BASIC INFORMATION:</h2>
-    <form class="form-grid">
+    <form id="patientForm" class="form-grid">
+      <h2>BASIC INFORMATION:</h2>
       <div>
         <label for="first-name">First Name:</label>
-        <input type="text" id="first-name" />
+        <input type="text" id="first-name" required/>
       </div>
       <div>
         <label for="middle-name">Middle Name:</label>
@@ -39,56 +39,63 @@
       </div>
       <div>
         <label for="last-name">Last Name:</label>
-        <input type="text" id="last-name" />
+        <input type="text" id="last-name" required/>
       </div>
       <div>
         <label for="address">Address:</label>
-        <input type="text" id="address" />
+        <input type="text" id="address" required/>
       </div>
       <div>
         <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" />
+        <input type="text" id="phone" required/>
       </div>
       <div>
         <label for="insurance">Insurance ID:</label>
-        <input type="text" id="insurance" />
+        <input type="text" id="insurance" required/>
       </div>
-    </form>
 
-    <hr />
+      <hr/>
 
-    <h2>VITALS:</h2>
-    <form class="form-grid">
+      <h2>VITALS:</h2>
       <div>
         <label for="visit-date">Date of Visit:</label>
-        <input type="date" id="visit-date" />
+        <input type="date" id="visit-date" required/>
       </div>
       <div>
         <label for="bp">Blood Pressure:</label>
-        <input type="text" id="bp" />
+        <input type="text" id="bp" required/>
       </div>
-
       <div>
         <label for="height">Height:</label>
-        <input type="text" id="height" />
+        <input type="text" id="height" required/>
       </div>
       <div>
         <label for="eye-test">Eye Test:</label>
-        <input type="text" id="eye-test" />
+        <input type="text" id="eye-test" required/>
       </div>
-
       <div>
         <label for="weight">Weight:</label>
-        <input type="text" id="weight" />
+        <input type="text" id="weight" required/>
       </div>
       <div>
         <label for="hearing">Hearing Test:</label>
-        <input type="text" id="hearing" />
+        <input type="text" id="hearing" required/>
       </div>
-    </form>
 
-    <a href = "../Record_FE/record_page.html" button class="submit-btn">CONTINUE ></a>
+      <button type="submit" class="submit-btn">CONTINUE ></button>
+    </form>
   </main>
+
+  <script>
+    document.getElementById("patientForm").addEventListener("submit", function(e) {
+      if (!this.checkValidity()) {
+        e.preventDefault(); // block submit if invalid
+        return;
+      }
+      e.preventDefault(); // prevent default form post
+      window.location.href = "../Record_FE/record_page.html"; // go to next page
+    });
+  </script>
 
 </body>
 </html>

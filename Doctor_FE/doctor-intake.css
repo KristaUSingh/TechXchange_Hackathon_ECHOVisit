@@ -44,7 +44,7 @@ h1 {
 h2 {
   font-family: 'echovisitHeader', sans-serif;
   font-weight: bold;
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 1.2rem;
   text-transform: uppercase;
 }
@@ -52,12 +52,29 @@ h2 {
 /* Form grid layout */
 .form-grid {
   font-family: 'echovisitPara', sans-serif;
-  font-weight: 700;
+  font-weight: 400;              /* was 700; makes labels less heavy */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr 1fr; /* <-- lock to two columns */
   gap: 1rem 2rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
+}
+
+/* Any full-width elements inside the grid should span both columns */
+.form-grid h2,
+.form-grid hr,
+.form-grid .submit-btn,
+.form-grid .full-row {           /* add this utility class for any wrapper you want full-width */
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+/* Make the HR a horizontal rule again */
+hr {
+  border: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.25);
+  margin: 1.5rem 0;
 }
 
 label {
@@ -66,11 +83,12 @@ label {
   margin-bottom: 0.3rem;
 }
 
+/* Inputs look cleaner a touch bigger */
 input {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.7rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1rem;
 }
 
