@@ -23,21 +23,71 @@
   </header>
 
   <main class="summary-page">
-    <section class="welcome">
       <h1>WELCOME PATIENT ECHO!</h1>
-      <p>Here is a summary of your visit:</p>
-    </section>
 
-    <section class="summary-box">
-      <p>(SUMMARY HERE)</p>
-    </section>
+      <div class="patient-toolbar">
+        <label class="simp-group">
+          <input type="checkbox" id="simplifyToggle" />
+          <span>Simplified version</span>
+        </label>
+      
+        <label class="lang-group">
+          <span>Language:</span>
+          <select id="langSelect">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="zh">中文</option>
+            <option value="ar">العربية</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </label>
+      </div>
+      
 
-    <section class="question-box">
-      <p>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</p>
-      <textarea placeholder="ask anything"></textarea>
-    </section>
+      <p id="reviewBlurb">HERE’S YOUR DOCTOR'S RECORDING & TRANSCRIPTION:</p><br>
+      <div id="playbackWrap" class="media-block" hidden>
+        <audio id="reviewAudio" controls></audio>
+      </div>
+  
+      <div id="transcriptionWrap" class="media-block" hidden>
+        <label class="media-label">Transcription</label>
+        <textarea id="rawTranscript" rows="6" class="media-textarea"></textarea>
+      </div>
+
+      <hr>
+
+      <p id="reviewHeader">VISIT SUMMARY:</p>
+      
+      <form class="review-form">
+        <label>ALLERGIES:</label>
+        <textarea id="allergiesTA" class="ta-locked" readonly></textarea>
+  
+        <label>SYMPTOMS:</label>
+        <textarea id="symptomsTA" class="ta-locked" readonly></textarea>
+  
+        <label>DIAGNOSIS:</label>
+        <textarea id="diagnosisTA" class="ta-locked" readonly></textarea>
+  
+        <label>MEDICATIONS:</label>
+        <textarea id="medicationsTA" class="ta-locked" readonly></textarea>
+  
+        <label>INSTRUCTIONS:</label>
+        <textarea id="instructionsTA" class="ta-locked" readonly></textarea>
+  
+        <label>ADDITIONAL NOTES:</label>
+        <textarea id="notesTA" class="ta-locked" readonly></textarea>
+
+        <hr>
+
+        <label>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</label>
+        <textarea placeholder="ask anything"></textarea>
+      </form>
 
     <button class="scroll-up">⬆</button>
+
+    <script src="./patient.js"></script>
   </main>
 </body>
 </html>
