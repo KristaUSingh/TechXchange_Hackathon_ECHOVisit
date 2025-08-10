@@ -27,9 +27,17 @@
     <h1>WELCOME DR. ECHO!</h1>
     <p>Please record your patient's visit summary:</p>
 
-    <button class="record-button">
-      <span>Click to start<br>recording</span>
+    <button id="recordBtn" class="record-button" aria-pressed="false">
+      <span id="recordLabel">Click to start<br>recording</span>
     </button>
+    
+    <p id="result" style="margin-top:40px;"></p>
+    
+    <button id="continueBtn" class="continue-button" hidden>Continue →</button>
+    
+    <script defer src="./recorder.js"></script>
+    
+
   </main>
 </body>
 </html>
