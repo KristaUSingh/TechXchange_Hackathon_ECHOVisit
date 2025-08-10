@@ -1,0 +1,188 @@
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #e5f6f9;
+}
+
+.form-wrapper {
+  height: calc(100vh - 80px); /* Adjust based on navbar height */
+  width: 100vw;               /* Make wrapper span full screen width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: rgba(159, 167, 177, 0.3);
+}
+
+
+.form {
+  max-width: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.4em;
+  background-color: #171717;
+  color-interpolation-filters: auto;  
+  border-radius: 25px;
+  transition: .4s ease-in-out;
+}
+
+
+.form:hover {
+  transform: scale(1.05);
+  border: 1px solid rgb(130, 111, 111);
+}
+
+#heading {
+  font-family: 'echovisitHeader', sans-serif;
+  text-align: center;
+  margin: 2em;
+  color: #FFDDD2;
+  font-size: 1.2em;
+}
+
+.field {
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 25px;
+  padding: 0.6em;
+  border: none;
+  outline: none;
+  color: #FFDDD2;
+  background-color: rgba(57, 62, 68, 0.3);
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+}
+
+.input-icon {
+  height: 1.3em;
+  width: 1.3em;
+  fill: #FFDDD2;
+}
+
+.input-field {
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #FFDDD2;
+}
+
+.form .btn {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 2.5em;
+}
+
+.button1 {
+  font-family: 'echovisitHeader', sans-serif;
+  padding: 0.5em;
+  padding-left: 1.1em;
+  padding-right: 1.1em;
+  border-radius: 5px;
+  margin-right: 0.5em;
+  border: none;
+  outline: none;
+  transition: .4s ease-in-out;
+  background-color: #252525;
+  color:#FFDDD2;
+}
+
+.button1:hover {
+  background-color: #006D77;
+  color: white;
+}
+
+.button2 {
+  font-family: 'echovisitHeader', sans-serif;
+  padding: 0.5em;
+  padding-left: 1.1em;
+  padding-right: 1.1em;
+  border-radius: 5px;
+  margin-right: 0.5em;
+  border: none;
+  outline: none;
+  transition: .4s ease-in-out;
+  background-color: #252525;
+  color: #FFDDD2;
+}
+
+.button2:hover {
+  background-color: #006D77;
+  color: white;
+}
+
+.button3 {
+  font-family: 'echovisitHeader', sans-serif;
+  margin-bottom: 3em;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  transition: .4s ease-in-out;
+  background-color: #252525;
+  color: #FFDDD2;
+}
+
+.button3:hover {
+  background-color: #006D77;
+  color: rgb(255, 255, 255);
+}
+
+.navbar {
+  font-family: 'echovisitHeader', sans-serif;
+  background-color: #2c2c2c;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: #FFDDD2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+footer {
+  font-family: 'echovisitPara', sans-serif;
+  background-color: #333;
+  color: white;
+  padding: 50px;
+  font-size: 0.9em;
+  text-align: center;
+}

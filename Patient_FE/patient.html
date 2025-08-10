@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Summary - EchoVisit</title>
+  <link rel="stylesheet" href="patient.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="../logo/4.png" alt="EchoVisit Logo" class="logo" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="../Home_FE/home.html">HOME</a></li>
+        <li><a href="#">ABOUT US</a></li>
+        <li><a href="#">FEATURES</a></li>
+        <li><a href="#">CONTACT</a></li>
+        <li><a href="#">SIGN UP</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="summary-page">
+      <h1>WELCOME PATIENT ECHO!</h1>
+
+      <div class="patient-toolbar">
+        <label class="simp-group">
+          <input type="checkbox" id="simplifyToggle" />
+          <span>Simplified version</span>
+        </label>
+      
+        <label class="lang-group">
+          <span>Language:</span>
+          <select id="langSelect">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="zh">中文</option>
+            <option value="ar">العربية</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </label>
+      </div>
+      
+
+      <p id="reviewBlurb">HERE’S YOUR DOCTOR'S RECORDING & TRANSCRIPTION:</p><br>
+      <div id="playbackWrap" class="media-block" hidden>
+        <audio id="reviewAudio" controls></audio>
+      </div>
+  
+      <div id="transcriptionWrap" class="media-block" hidden>
+        <label class="media-label">Transcription</label>
+        <textarea id="rawTranscript" rows="6" class="media-textarea"></textarea>
+      </div>
+
+      <hr>
+
+      <p id="reviewHeader">VISIT SUMMARY:</p>
+      
+      <form class="review-form">
+        <label>ALLERGIES:</label>
+        <textarea id="allergiesTA" class="ta-locked" readonly></textarea>
+  
+        <label>SYMPTOMS:</label>
+        <textarea id="symptomsTA" class="ta-locked" readonly></textarea>
+  
+        <label>DIAGNOSIS:</label>
+        <textarea id="diagnosisTA" class="ta-locked" readonly></textarea>
+  
+        <label>MEDICATIONS:</label>
+        <textarea id="medicationsTA" class="ta-locked" readonly></textarea>
+  
+        <label>INSTRUCTIONS:</label>
+        <textarea id="instructionsTA" class="ta-locked" readonly></textarea>
+  
+        <label>ADDITIONAL NOTES:</label>
+        <textarea id="notesTA" class="ta-locked" readonly></textarea>
+
+        <hr>
+
+        <label>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</label>
+        <textarea placeholder="ask anything"></textarea>
+      </form>
+
+    <button class="scroll-up">⬆</button>
+
+    <script src="./patient.js"></script>
+  </main>
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* Base styles */
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+body {
+  margin: 0;
+  font-family: 'echovisitPara', sans-serif;
+  background-color: #7ecac3;
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  font-family: 'echovisitHeader', sans-serif;
+  font-weight: 700;
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  color: #444;
+}
+
+h2 {
+  font-family: 'echovisitHeader', sans-serif;
+  font-weight: bold;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+/* Form grid layout */
+.form-grid {
+  font-family: 'echovisitPara', sans-serif;
+  font-weight: 400;              /* was 700; makes labels less heavy */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* <-- lock to two columns */
+  gap: 1rem 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Any full-width elements inside the grid should span both columns */
+.form-grid h2,
+.form-grid hr,
+.form-grid .submit-btn,
+.form-grid .full-row {           /* add this utility class for any wrapper you want full-width */
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+/* Make the HR a horizontal rule again */
+hr {
+  border: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.25);
+  margin: 1.5rem 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+/* Inputs look cleaner a touch bigger */
+input {
+  width: 100%;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Button */
+.submit-btn {
+  background-color: #ff917a;
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #e07b67;
+}
+
+/* Navbar */
+.navbar {
+  font-family: 'echovisitHeader', sans-serif;
+  font-weight: bold;
+  background-color: #2c2c2c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.logo {
+  height: 40px;
+}
