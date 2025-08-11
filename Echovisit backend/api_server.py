@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify, Response
-from watsonx_agent import simplify_summary, translation_summary
+from watsonx_agent import simplify_summary, translation_summary, questions_suggestions, translation_summary_safe
 import json
 from watsonx_agent import process_transcript
 from flask_cors import CORS
 import whisper
 import os
+import re
 
 whisper_model = whisper.load_model("base")
 app = Flask("ECHOVisit")
@@ -50,6 +51,7 @@ def _normalize_summary_keys(s):
             "instructions": "",
             "notes": s if isinstance(s, str) else ""
         }
+        
 
     # Map common translations/variants back to English keys
     keymap = {
@@ -175,7 +177,6 @@ def simplify_all():
 
 
 
-
 @app.route("/translate_all", methods=["POST"])
 def translate_all():
     """
@@ -224,6 +225,97 @@ def translate_all():
         print("translate_all parse error:", e, "\nRAW:", out_text[:800])
         return jsonify(payload_in)
 
+@app.route("/follow_up", methods=["POST"])
+def follow_up():
+    payload = request.get_json(force=True) or {}
+    summary = payload.get("summary") or {}
+    try:
+        qs = questions_suggestions(summary)
+        if isinstance(qs, tuple): qs = qs[0]
+        if not isinstance(qs, list): qs = [str(qs)]
+        qs = [str(x).strip() for x in qs if str(x).strip()]
+        return jsonify({"questions": qs[:3]}), 200
+    except Exception as e:
+        print("follow_up error:", e)
+        return jsonify({"questions": ["Sorry, I couldn’t generate follow‑up questions."]}), 200
+    
+
+code_to_name = {
+    "en": "English", "es": "Spanish", "fr": "French",
+    "de": "German",  "zh": "Chinese", "ar": "Arabic", "hi": "Hindi",
+}
+
+def clean_translated_questions(output):
+    """
+    Extracts translated questions from raw output, assuming they are either in a JSON
+    or appear as bullet points or numbered lines.
+    """
+    # Try to parse JSON response first
+    if isinstance(output, dict) and "questions" in output:
+        return output["questions"][:3]
+
+    # If it's a string, extract bullet points manually
+    if isinstance(output, str):
+        lines = output.splitlines()
+        extracted = []
+        for line in lines:
+            line = line.strip()
+            if re.match(r"^[•\-–\d\*]+\s", line):  # bullets or numbers
+                clean = re.sub(r"^[•\-–\d\*]+\s*", "", line)
+                extracted.append(clean)
+        return extracted[:3]
+
+    # Fallback
+    return []
+
+@app.route("/translate_follow_up", methods=["POST"])
+def translate_follow_up():
+    payload = request.get_json(force=True) or {}
+    questions = payload.get("questions") or []
+    lang_code = (payload.get("lang") or "en").lower()
+    target = code_to_name.get(lang_code, lang_code)
+
+    qs = [str(q).strip() for q in questions[:3] if str(q).strip()]
+    if not qs:
+        return jsonify({"questions": []}), 200
+
+    # Tag each question so structure survives translation
+    block = "\n".join([f"[[Q{i+1}]] {q} [[/Q{i+1}]]" for i, q in enumerate(qs)])
+
+    translated = translation_summary_safe(block, target_lang=target)
+
+    # Pull each tagged item back out, even if the model added bullets/extra spaces
+    pairs = re.findall(r"\[\[Q(\d+)\]\]\s*(.*?)\s*\[\[/Q\1\]\]", translated, flags=re.S)
+
+    if len(pairs) < len(qs):
+        print("⚠️ Tag matching failed. Falling back to bullet-based parsing.")
+        # Try to extract up to 3 bullet points
+        bullets = re.findall(r"[•\-–\*\d\.\)]\s*(.+)", translated)
+        if len(bullets) >= len(qs):
+            pairs = [(str(i+1), bullets[i]) for i in range(len(qs))]
+        else:
+            # Final fallback: just grab non-empty lines
+            lines = [line.strip() for line in translated.splitlines() if line.strip()]
+            pairs = [(str(i+1), lines[i]) for i in range(min(len(lines), len(qs)))]
+
+
+    def clean(txt: str, orig: str) -> str:
+        txt = (txt or "").replace("```"," ").strip()
+        txt = re.sub(r"^[#>\-\*\s•\d\.\)\(]+", "", txt)  # strip bullets/numbers
+        txt = re.sub(r"\s{2,}", " ", txt).strip()
+        # keep only first line
+        lines = txt.splitlines()
+        for line in lines:
+            if "?" in line and len(line.strip()) > 5:
+                return line.strip()
+        return orig
+
+    out = []
+    for i, orig in enumerate(qs, start=1):
+        found = next((t for n, t in pairs if str(n) == str(i)), "")
+        out.append(clean(found, orig))
+
+    return jsonify({"questions": out}), 200
 
 
 if __name__ == "__main__":

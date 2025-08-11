@@ -288,6 +288,26 @@ def questions_suggestions(summary):
         return [f"Failed to parse follow‑up output: {e}"], {"debug": resp.text[:2000]}
 
 
+# Keep your existing translation_summary as-is if you prefer.
+# Add this safe wrapper and call THIS from Flask.
+
+def translation_summary_safe(text: str, target_lang: str = "Spanish") -> str:
+    try:
+        # Map codes to names (handles 'de' -> 'German')
+        m = {"en":"English","es":"Spanish","fr":"French","de":"German","zh":"Chinese","ar":"Arabic","hi":"Hindi"}
+        target = m.get((target_lang or "").lower(), target_lang)
+
+        # Call your existing translator exactly how it worked before:
+        out = translation_summary(text, target_lang=target)  # <-- your original function
+        if not isinstance(out, str) or not out.strip():
+            return text
+        # light cleanup only; keep newlines
+        out = out.replace("```"," ").strip()
+        return out
+    except Exception as e:
+        print("translation_summary_safe error:", repr(e))
+        return text
+
 
 # Final pipeline
 def process_transcript(transcript):
