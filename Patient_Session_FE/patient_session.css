@@ -1,9 +1,28 @@
 /* Base */
-* { box-sizing: border-box; }
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+* { 
+  box-sizing: border-box; 
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #7ecac3; /* your teal */
+  background: #f0cfcf;; /* your teal */
   color: #0e0e0e;
 }
 
@@ -15,9 +34,24 @@ body {
   justify-content: space-between;
   padding: 1rem 2rem;
 }
-.nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
-.nav-links a { color: #FFDDD2; text-decoration: none; font-weight: bold; }
-.logo { height: 40px; }
+.nav-links { 
+  list-style: none; 
+  display: flex; 
+  gap: 2rem; 
+  margin: 0; 
+  padding: 0; 
+}
+
+.nav-links a { 
+  font-family: 'echovisitHeader', sans-serif;
+  color: #FFDDD2; 
+  text-decoration: none; 
+  font-weight: bold; 
+}
+
+.logo { 
+  height: 40px; 
+}
 
 /* Layout */
 .wrap {
@@ -25,8 +59,20 @@ body {
   margin: 2.5rem auto 3rem;
   padding: 0 1.25rem;
 }
-h1 { margin: 0 0 .25rem; font-size: 2rem; }
-.subtitle { margin: 0 0 1.5rem; color: #173d40; }
+
+h1 { 
+  font-family: 'echovisitHeader', sans-serif;
+  text-transform: uppercase;
+  margin: 0 0 .25rem; 
+  font-size: 2rem; 
+}
+
+.subtitle { 
+  text-transform: uppercase;
+  font-family: 'echovisitPara', sans-serif;
+  margin: 0 0 1.5rem; 
+  color: #173d40; 
+}
 
 /* Toolbar */
 .toolbar {
@@ -37,6 +83,8 @@ h1 { margin: 0 0 .25rem; font-size: 2rem; }
   margin-bottom: 1rem;
 }
 #search {
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
   width: 100%;
   padding: .75rem 1rem;
   border-radius: 10px;
@@ -45,24 +93,47 @@ h1 { margin: 0 0 .25rem; font-size: 2rem; }
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.06);
   font-size: 1rem;
 }
-.filters { display: flex; gap: .5rem; flex-wrap: wrap; justify-self: end; }
+.filters { 
+  display: flex; 
+  gap: .5rem; 
+  flex-wrap: wrap; 
+  justify-self: end; 
+}
+
 .chip {
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
   background: #2c2c2c;
-  color: #FFDDD2;
+  color: #FFDDD2; 
   border: none;
   padding: .5rem .8rem;
   border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
 }
-.chip.active { background: #173d40; }
+.chip.active { 
+  background: #173d40; 
+}
 
 /* Grid of session cards */
 .grid {
   display: grid;
+  align-items: center;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 18px;
 }
+
 .card {
   background: #8dd0cb;
+  text-align: center;
+  padding-bottom: 1.5rem;
 }
+
+h3 {
+  font-family: 'echovisitHeader', sans-serif;
+}
+
+p {
+  font-family: 'echovisitPara', sans-serif;
+}
+

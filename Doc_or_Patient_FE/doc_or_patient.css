@@ -1,4 +1,20 @@
 /* Reset & font */
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +42,8 @@ body {
 }
 
 .nav-links a {
-  color: white;
+  font-family: 'echovisitHeader', sans-serif;
+  color: #FFDDD2;
   text-decoration: none;
   font-weight: bold;
 }
@@ -38,6 +55,10 @@ body {
 .logo {
   height: 40px;
   width: auto;
+}
+
+h1 {
+  font-family: 'echovisitHeader', sans-serif;
 }
 
 /* Choice section */
@@ -86,6 +107,7 @@ body {
 }
 */
 .button2 {
+  font-family: 'echovisitPara', sans-serif;
   display: inline-block;
   transition: all 0.2s ease-in;
   position: relative;

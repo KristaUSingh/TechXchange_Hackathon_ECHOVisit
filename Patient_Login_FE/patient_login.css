@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -38,6 +54,7 @@ body {
 }
 
 #heading {
+  font-family: 'echovisitHeader', sans-serif;
   text-align: center;
   margin: 2em;
   color: #FFDDD2;
@@ -66,6 +83,7 @@ body {
 }
 
 .input-field {
+  font-family: 'echovisitPara', sans-serif;
   background: none;
   border: none;
   outline: none;
@@ -82,6 +100,7 @@ body {
 }
 
 .button1 {
+  font-family: 'echovisitPara', sans-serif;
   padding: 0.5em;
   padding-left: 1.1em;
   padding-right: 1.1em;
@@ -102,6 +121,7 @@ body {
 }
 
 .button2 {
+  font-family: 'echovisitPara', sans-serif;
   padding: 0.5em;
   padding-left: 1.1em;
   padding-right: 1.1em;
@@ -121,6 +141,7 @@ body {
 }
 
 .button3 {
+  font-family: 'echovisitPara', sans-serif;
   margin-bottom: 3em;
   padding: 0.5em;
   border-radius: 5px;
@@ -152,6 +173,7 @@ body {
 }
 
 .nav-links a {
+  font-family: 'echovisitHeader', sans-serif;
   color: #FFDDD2;
   text-decoration: none;
   font-weight: bold;

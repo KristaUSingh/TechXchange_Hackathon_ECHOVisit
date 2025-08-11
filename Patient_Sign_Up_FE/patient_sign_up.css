@@ -1,7 +1,23 @@
+@font-face {
+  font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
+@font-face {
+  font-family: 'echovisitPara'; /* Choose a descriptive name for your font */
+  src: url('../fonts/Proxima Nova/proximanova_regular.ttf') format('truetype'); /* Include multiple formats for browser compatibility */
+  font-weight: normal; /* Optional: define font weight */
+  font-style: normal; /* Optional: define font style */
+  font-display: swap; /* Optional: improve font loading experience */
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #e5f6f9;
+  background-color:  #FFDDD2;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -38,14 +54,15 @@ body {
 }
 
 #heading {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'echovisitHeader', sans-serif;
   text-align: center;
   margin: 1em;
-  color: #FFDDD2;
+  color:#A8DADC;
   font-size: 1.7em;
 }
 
 .field {
+  font-family: 'echovisitPara', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,6 +164,7 @@ body {
 }
 
 .nav-links a {
+  font-family: 'echovisitHeader', sans-serif;
   color: #FFDDD2;
   text-decoration: none;
   font-weight: bold;
@@ -170,20 +188,19 @@ footer {
   border-radius: .25rem;
   text-transform: uppercase;
   font-style: normal;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'echovisitPara', sans-serif;
+  text-align: center;
   font-weight: 600;
   padding-left: 30px;
   padding-right: 25px;
   padding-top: 25px;
   color: #000000;
-  -webkit-clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
-  clip-path: polygon(0 0,0 0,100% 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 100%);
   height: 40px;
   font-size: 0.9rem;
   line-height: 14px;
   letter-spacing: 1.2px;
   transition: .2s .1s;
-  background-image: linear-gradient(90deg,#3a3636,#b8b2c7);
+  background-color: #A8DADC;
   border: 0 solid;
   overflow: hidden;
   text-decoration: none;
@@ -203,10 +220,10 @@ footer {
 }
 
 .doc {
+  font-family: 'echovisitPara', sans-serif;
   border-radius: 1.0rem;
   text-transform: uppercase;
   font-style: normal;
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 600;
   font-size: 3rem;
   padding-top: 10px;
@@ -217,9 +234,9 @@ footer {
 
 .checkbox-wrapper {
   --checkbox-size: 25px;
-  --checkbox-color: #00ff88;
+  --checkbox-color: #A8DADC;
   --checkbox-shadow: rgba(0, 255, 136, 0.3);
-  --checkbox-border: rgba(0, 255, 136, 0.7);
+  --checkbox-border:#A8DADC;
   display: flex;
   align-items: center;
   position: relative;
@@ -313,7 +330,8 @@ footer {
 
 .checkbox-wrapper .label {
   margin-left: 15px;
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
   color: var(--checkbox-color);
   font-size: 18px;
   text-shadow: 0 0 10px var(--checkbox-shadow);
