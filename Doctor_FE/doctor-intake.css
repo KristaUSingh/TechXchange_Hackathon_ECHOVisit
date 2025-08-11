@@ -1,4 +1,9 @@
 /* Base styles */
+
+/* put near the top of your CSS */
+.hidden { display: none !important; }
+[hidden] { display: none !important; }
+
 @font-face {
   font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
   src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
@@ -133,3 +138,81 @@ input {
 .logo {
   height: 40px;
 }
+
+.input-like {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0 10px;
+  height: 40px;
+}
+
+.input-like select {
+  border: none;
+  background: none;
+  padding: 0 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.input-like span {
+  margin: 0 5px;
+  color: #555;
+}
+
+#weight-wrap input { border: 0; outline: 0; flex: 1; padding: 0 6px; background: none; }
+#weight-wrap select { border: 0; outline: 0; background: none; padding: 0 6px; font-size: 1rem; }
+
+.bmi-indicator{
+  margin-top:6px; font-size:0.9rem; font-weight:600;
+  display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid transparent;
+}
+
+/* colors */
+.bmi-ok   { color:#065f46; background:#d1fae5; border-color:#10b981; }   /* green */
+.bmi-low  { color:#92400e; background:#fef3c7; border-color:#f59e0b; }   /* yellow */
+.bmi-high { color:#7f1d1d; background:#fee2e2; border-color:#ef4444; }   /* red */
+
+/* optional: tint BMI input border to match */
+#bmi.ok   { border-color:#10b981; }
+#bmi.low  { border-color:#f59e0b; }
+#bmi.high { border-color:#ef4444; }
+
+.meds-row{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px 16px;
+  margin:12px 0 14px;
+}
+.meds-field.full{ grid-column: 1 / -1; }
+
+.meds-sublabel{ display:block; font-size:0.8rem; color:#4b5563; margin:2px 2px 6px; }
+
+.meds-row input{
+  width:100%; height:40px; border:1px solid #d1d5db; border-radius:8px;
+  padding:0 10px; background:#fff; box-sizing:border-box;
+}
+
+/* inline Add button to the right of Frequency */
+.meds-inline{ display:flex; gap:10px; }
+.meds-inline input{ flex:1; }
+.meds-inline .submit-btn{ height:40px; padding:0 16px; }
+
+.meds-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.meds-empty{ color:#6b7280; font-size:0.95rem; }
+
+.med-chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:999px;
+  background:#fee2e2; color:#7f1d1d; border:1px solid #ef4444; font-weight:600;
+}
+.med-chip .x{
+  cursor:pointer; border:none; background:transparent; font-weight:800; line-height:1;
+  color:#7f1d1d; padding:0 4px; border-radius:6px;
+}
+.med-chip .x:hover{ background:#fecaca; }
+
+
+
