@@ -38,9 +38,6 @@
             <option value="es">Español</option>
             <option value="fr">Français</option>
             <option value="de">Deutsch</option>
-            <option value="zh">中文</option>
-            <option value="ar">العربية</option>
-            <option value="hi">हिंदी</option>
           </select>
         </label>
       </div>
@@ -81,7 +78,19 @@
 
         <hr>
 
-        <label>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</label>
+        <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label>
+        <div id="followUpControl">
+          <button type="button" id="yesFollowUp">Yes</button>
+          <button type="button" id="noFollowUp">No</button>
+        </div>
+
+        <div id="followUpOutput" style="display: none; margin-top: 10px;">
+          <textarea id="followUpTA" rows="6" style="width: 100%;" readonly></textarea>
+        </div>        
+
+        <hr>
+
+        <label>DO YOU HAVE ANY ADDITIONAL QUESTIONS? USE THE INTERACTIVE Q&A TO GET THE BEST ANSWER POSSIBLE!</label>
         <textarea placeholder="ask anything"></textarea>
       </form>
 
@@ -89,5 +98,13 @@
 
     <script src="./patient.js"></script>
   </main>
+
+  <!-- LOADING OVERLAY -->
+  <div id="pageOverlay" style="display:none;">
+    <div id="overlayContent">
+      <div class="spinner"></div>
+      <p id="overlayMessage">Loading...</p>
+    </div>
+  </div>
 </body>
 </html>

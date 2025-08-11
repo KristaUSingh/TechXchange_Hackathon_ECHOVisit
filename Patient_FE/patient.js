@@ -187,26 +187,50 @@ window.addEventListener('DOMContentLoaded', () => {
     async function refresh() {
       const lang = langSelect.value || 'en';
       const simp = simplifyToggle.checked;
-  
+    
+      let action = null;
+      const langName = langSelect.options[langSelect.selectedIndex]?.text || lang;
+
+      if (lang !== 'en' && simp) {
+        action = `Simplifying and translating to ${langName}...`;
+      } else if (lang !== 'en') {
+        action = `Translating to ${langName}...`;
+      } else if (simp) {
+        action = "Simplified version loading...";
+      }
+
+      if (action) showOverlay(action);
+    
       try {
         if (lang === 'en' && !simp) {
           render(toViewData(cache.get('original|en')));
-          return;
-        }
-        if (lang === 'en' && simp) {
+          hideOverlay(); // ✅ ADD THIS
+        } else if (lang === 'en' && simp) {
           const simpData = await getSimplified();
           render(toViewData(simpData));
-          return;
+          hideOverlay(); // ✅ ADD THIS
+        } else {
+          // any non-English
+          const mode = simp ? 'simplified' : 'original';
+    
+          // Run both translation and follow-up translation in parallel
+          const [translated, followUps] = await Promise.all([
+            getTranslated(lang, mode),
+            (fuWrap.style.display === 'block' && baseFollowUpsEN)
+              ? translateFollowUps(baseFollowUpsEN, lang)
+              : Promise.resolve(null)
+          ]);
+    
+          render(toViewData(translated));
+          if (followUps) showFollowUps(followUps);
+          hideOverlay(); // hide after successful load
         }
-        // any non-English
-        const mode = simp ? 'simplified' : 'original';
-        const translated = await getTranslated(lang, mode);
-        render(toViewData(translated));
       } catch (e) {
         console.error(e);
         render(originalView);
+        hideOverlay(); // hide even on failure
       }
-    }
+    }    
   
     simplifyToggle.addEventListener('change', refresh);
     langSelect.addEventListener('change', refresh);
@@ -216,7 +240,121 @@ window.addEventListener('DOMContentLoaded', () => {
     const urlSimp = new URLSearchParams(location.search).get('simp');
     if (urlLang) langSelect.value = urlLang;
     if (urlSimp === '1') simplifyToggle.checked = true;
-  
+
+    // ---------- FOLLOW-UP Qs (one-time generation, language-switch reuses) ----------
+    const followTranslations = new Map(); // lang -> ["q1","q2","q3"]
+    let baseFollowUpsEN = null;          // the canonical English questions
+
+    // UI elements
+    const yesFU = byId('yesFollowUp');
+    const noFU  = byId('noFollowUp');
+    const fuWrap = byId('followUpOutput');
+    const fuTA   = byId('followUpTA');
+
+    let loadingInterval = null;
+
+    function showOverlay(message = "Loading...") {
+      const overlay = document.getElementById("pageOverlay");
+      const msg = document.getElementById("overlayMessage");
+      if (overlay && msg) {
+        msg.textContent = message;
+        overlay.style.display = "flex";
+      }
+    }
+    
+    function hideOverlay() {
+      const overlay = document.getElementById("pageOverlay");
+      if (overlay) overlay.style.display = "none";
+    }
+    
+
+    function showFollowUpLoading() {
+      fuWrap.style.display = 'block';
+      fuTA.value = "Generating follow-up questions";
+      let dots = "";
+      loadingInterval = setInterval(() => {
+        dots = dots.length >= 3 ? "" : dots + ".";
+        fuTA.value = "Generating follow-up questions" + dots;
+      }, 500);
+    }
+    
+    function stopFollowUpLoading() {
+      clearInterval(loadingInterval);
+      loadingInterval = null;
+    }
+    
+
+    function showFollowUps(qs) {
+      fuTA.value = (qs && qs.length) ? qs.map((q) => `• ${q}`).join('\n') : '';
+      fuWrap.style.display = 'block';
+    }
+    function hideFollowUps() {
+      fuTA.value = '';
+      fuWrap.style.display = 'none';
+    }
+
+    async function fetchFollowUpsEN() {
+      const src = makeBaseSource();
+      const data = await postJSON(`${API_BASE}/follow_up`, { summary: src.summary });
+      const arr = Array.isArray(data.questions) ? data.questions : [];
+      return arr.slice(0, 3);
+    }
+
+    async function translateFollowUps(questions, lang) {
+      if (!questions || !questions.length || lang === 'en') return questions || [];
+      // cached?
+      if (followTranslations.has(lang)) return followTranslations.get(lang);
+      const data = await postJSON(`${API_BASE}/translate_follow_up`, {
+        questions,
+        lang
+      });
+      const out = Array.isArray(data.questions) ? data.questions.slice(0, 3) : [];
+      followTranslations.set(lang, out);
+      return out;
+    }
+
+    yesFU?.addEventListener('click', async () => {
+      yesFU.disabled = true;
+      showFollowUpLoading(); // <- start animation
+      try {
+        // Generate EN only once
+        if (!baseFollowUpsEN) {
+          baseFollowUpsEN = await fetchFollowUpsEN();
+          followTranslations.set('en', baseFollowUpsEN);
+        }
+        const lang = (langSelect?.value || 'en');
+        const qs = await translateFollowUps(baseFollowUpsEN, lang);
+        stopFollowUpLoading(); // <- stop animation
+        showFollowUps(qs);
+      } catch (e) {
+        console.error('follow-up generate error:', e);
+        stopFollowUpLoading(); // <- stop animation even on error
+        showFollowUps(["Sorry, I couldn’t generate follow-up questions right now."]);
+      } finally {
+        yesFU.disabled = false;
+      }
+    });
+    
+
+    noFU?.addEventListener('click', () => {
+      hideFollowUps();
+    });
+
+    // If the user switches language AFTER generation, just translate the one-time EN set.
+    langSelect?.addEventListener('change', async () => {
+      if (fuWrap.style.display === 'block' && baseFollowUpsEN) {
+        try {
+          const lang = (langSelect.value || 'en');
+          const qs = await translateFollowUps(baseFollowUpsEN, lang);
+          showFollowUps(qs);
+        } catch (e) {
+          console.error('follow-up retranslate error:', e);
+        }
+      }
+    });
+
     refresh();
+
+
   });
   
