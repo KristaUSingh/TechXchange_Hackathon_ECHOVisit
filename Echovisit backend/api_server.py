@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Response
-from watsonx_agent import simplify_summary, translation_summary, questions_suggestions, translation_summary_safe
+from watsonx_agent import simplify_summary, translation_summary, questions_suggestions, translation_summary_safe, interactive_qa
 import json
 from watsonx_agent import process_transcript
 from flask_cors import CORS
@@ -316,6 +316,30 @@ def translate_follow_up():
         out.append(clean(found, orig))
 
     return jsonify({"questions": out}), 200
+
+@app.post("/qa")
+def qa_endpoint():
+    """
+    Body: {
+      "question": str,
+      "context": {
+        "transcript": str,
+        "summary": {
+          "allergies": ..., "symptoms": ..., "diagnosis": ...,
+          "medications": ..., "instructions": ..., "notes": ...
+        }
+      }
+    }
+    """
+    data = request.get_json(force=True) or {}
+    q = (data.get("question") or "").strip()
+    ctx = data.get("context") or {}
+
+    if not q:
+        return jsonify({"answer": "Please enter a question.", "followups": []}), 200
+
+    res = interactive_qa(q, ctx)
+    return jsonify(res), 200
 
 
 if __name__ == "__main__":

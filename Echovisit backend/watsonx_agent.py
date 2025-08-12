@@ -308,6 +308,64 @@ def translation_summary_safe(text: str, target_lang: str = "Spanish") -> str:
         print("translation_summary_safe error:", repr(e))
         return text
 
+def interactive_qa(question: str, context: dict):
+    """
+    Calls your deployed Interactive Q&A agent.
+    Returns: {"answer": str, "followups": [..]}
+    """
+    API_KEY = os.getenv("WATSONX_API_KEY")
+    ENDPOINT = "https://us-south.ml.cloud.ibm.com"
+    QA_DEPLOYMENT_ID = "cddad2f5-ba1d-4b92-87bf-94011877e5ec"  # <- from your screenshot
+    VERSION = "2021-05-01"
+
+    token = get_access_token(API_KEY)
+    if not token:
+        return {"answer": "Auth failed.", "followups": []}
+
+    url = f"{ENDPOINT}/ml/v4/deployments/{QA_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+
+    # Keep payload in the same "messages" style you use elsewhere.
+    # We pass both the question and the visit context as one user message.
+    user_content = json.dumps(
+        {"question": question, "context": context},
+        ensure_ascii=False, separators=(",", ":")
+    )
+    payload = {"messages": [{"role": "user", "content": user_content}]}
+
+    try:
+        resp = requests.post(
+            url,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            json=payload,
+            timeout=90,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+        content = (data["choices"][0]["message"]["content"] or "").strip()
+
+        # Try to parse structured output first: {"answer": "...", "followups": ["..",".."]}
+        try:
+            j = json.loads(content)
+            answer = (j.get("answer") or "").strip()
+            follows = j.get("followups") or []
+            if answer:
+                return {"answer": answer, "followups": follows if isinstance(follows, list) else []}
+        except Exception:
+            pass
+
+        # Fallback: model returned plain text
+        return {"answer": content, "followups": []}
+
+    except Exception as e:
+        print("Interactive Q&A error:", repr(e))
+        try:
+            print("RAW:", resp.text[:1200])
+        except Exception:
+            pass
+        return {"answer": "Sorry, I ran into an issue answering that.", "followups": []}
+
+
 
 # Final pipeline
 def process_transcript(transcript):
