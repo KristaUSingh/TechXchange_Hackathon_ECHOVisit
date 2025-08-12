@@ -211,6 +211,123 @@ textarea:focus {
     margin: 0 auto;
 }
 
+/* === Interactive Q&A === */
+:root{
+  --peach:#fde0d9;
+  --teal:#7ecac3;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --card:#ffffff;
+  --border: rgba(0,0,0,.08);
+}
+
+.qa-heading span { display:block; }
+
+/* No inner border/glow when textarea is focused */
+#qa-input:focus,
+#qa-input:focus-visible{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* (optional) keep the nice teal outline on the bar itself when typing */
+.qa-bar:focus-within{
+  border-color: var(--teal);
+  box-shadow: 0 6px 14px rgba(0,0,0,.06);
+}
+
+
+/* make the card a positioning context */
+.qa-wrap{
+  position: relative;
+  background: var(--peach);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+/* stream uses same corner radius */
+.qa-stream{
+  margin-top:12px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;           /* ← matches the bar now */
+  height:44vh;
+  overflow:auto;
+  padding:12px 12px 96px;       /* space for the bar */
+}
+
+/* BAR: rectangle w/ teal outline (no pill) */
+.qa-bar{
+  position:absolute;            /* anchored inside the card */
+  left:12px;
+  right:12px;
+  bottom:12px;
+  z-index:1;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:#fff;
+  border:2px solid var(--teal); /* ← teal outline */
+  border-radius:14px;           /* ← same corners as .qa-stream */
+  padding:10px 12px;
+  box-shadow:0 6px 14px rgba(0,0,0,.06);
+  margin-top:0;
+}
+
+/* input: transparent, no borders, fills bar */
+#qa-input{
+  flex:1;
+  resize:none;
+  border:none;
+  outline:none;
+  background:transparent;
+  font-family:'echovisitPara',sans-serif;
+  font-size:1rem;
+  color:var(--ink);
+  padding:6px 2px;
+}
+
+
+/* send button: square-ish to match corners */
+#qa-send{
+  border:1px solid var(--border);
+  background:#111;
+  color:#fff;
+  border-radius:10px;           /* small radius, not a pill */
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+
+.qa-hero{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:14px; display:flex; align-items:center; gap:14px; box-shadow:0 6px 16px rgba(0,0,0,.05);
+}
+.qa-hero-head{ display:flex; align-items:center; gap:10px; }
+.qa-bot{ width:36px; height:36px; display:grid; place-items:center; background:#eef2ff; border-radius:50%; }
+.qa-hero-title{ font-family:'echovisitHeader',sans-serif; font-weight:700; color:var(--ink); }
+.qa-hero-sub{ font-family:'echovisitPara',sans-serif; font-size:.9rem; color:var(--muted); }
+.qa-hero-art{
+  margin-left:auto; width:280px; height:90px; border-radius:10px; border:1px dashed var(--border);
+  background:
+    radial-gradient(circle at 70% 50%, #34d39933 0 70px, transparent 71px),
+    radial-gradient(circle at 40% 60%, #60a5fa33 0 70px, transparent 71px),
+    #fff;
+}
+
+
+.qa-msg{ max-width:78%; padding:10px 12px; border-radius:14px; line-height:1.35; margin:8px 0;
+  box-shadow:0 1px 6px rgba(0,0,0,.05); font-family:'echovisitPara',sans-serif; }
+.qa-msg.user{ margin-left:auto; background:var(--teal); color:#083536; border-bottom-right-radius:6px; }
+.qa-msg.bot{ background:#fff; border:1px solid var(--border); color:var(--ink); border-bottom-left-radius:6px; }
+.qa-meta{ font-size:.78rem; opacity:.7; margin-bottom:4px; }
+
+#qa-input::placeholder{ color:rgba(0,0,0,.35); }
+
+.typing{ font-size:.92rem; opacity:.7; padding:6px 8px; }
+
+
 @keyframes spin {
     to { transform: rotate(360deg); }
 }

@@ -353,6 +353,109 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // === Interactive Q&A (safe wrapper) ===
+(function QAModule(){
+  const API = (typeof API_BASE === "string" && API_BASE) || "http://127.0.0.1:5000";
+
+  const qaStream = document.getElementById("qa-stream");
+  const qaForm   = document.getElementById("qa-form");
+  const qaInput  = document.getElementById("qa-input");
+  const qaSend   = document.getElementById("qa-send");
+
+  if (!qaForm || !qaInput || !qaSend || !qaStream) {
+    console.warn("[Q&A] missing DOM elements");
+    return; // prevents ReferenceError
+  }
+
+  function qaAdd(role, text){
+    const wrap = document.createElement("div");
+    wrap.className = `qa-msg ${role}`;
+    const meta = document.createElement("div");
+    meta.className = "qa-meta";
+    meta.textContent = role === "user" ? "You" : "ECHOVisit";
+    const body = document.createElement("div");
+    body.textContent = text;
+    wrap.append(meta, body);
+    qaStream.appendChild(wrap);
+    qaStream.scrollTop = qaStream.scrollHeight;
+    return wrap;
+  }
+  function qaTyping(){
+    const t = document.createElement("div");
+    t.className = "typing";
+    t.textContent = "Agent is typing…";
+    qaStream.appendChild(t);
+    qaStream.scrollTop = qaStream.scrollHeight;
+    return t;
+  }
+
+  // auto-grow textarea; Enter=send, Shift+Enter=newline
+  qaInput.addEventListener("input", () => {
+    qaInput.style.height = "auto";
+    qaInput.style.height = Math.min(qaInput.scrollHeight, 180) + "px";
+  });
+  qaInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      qaForm.requestSubmit();
+    }
+  });
+
+  qaForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const q = (qaInput.value || "").trim();
+    if (!q) return;
+
+    qaAdd("user", q);
+    qaInput.value = ""; qaInput.style.height = "auto";
+    qaInput.disabled = true; qaSend.disabled = true;
+    const typing = qaTyping();
+
+    const src = typeof makeBaseSource === "function" ? makeBaseSource() : { transcript:"", summary:{} };
+    const url = `${API}/qa`;
+    const body = { question: q, context: src };
+
+    try{
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(body)
+      });
+      const raw = await res.text();
+      let data; try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
+
+      typing.remove();
+      qaAdd("bot", data.answer || "Sorry — I didn’t get that.");
+
+      if (Array.isArray(data.followups) && data.followups.length){
+        const chips = document.createElement("div");
+        chips.style.display="flex"; chips.style.flexWrap="wrap"; chips.style.gap="8px"; chips.style.marginTop="6px";
+        data.followups.forEach(text=>{
+          const btn = document.createElement("button");
+          btn.type="button"; btn.textContent=text;
+          btn.style.border="1px solid rgba(0,0,0,.15)";
+          btn.style.padding="6px 10px"; btn.style.borderRadius="999px";
+          btn.style.background="#fff"; btn.style.cursor="pointer";
+          btn.onclick = ()=>{
+            qaInput.value = text;
+            qaForm.requestSubmit();
+          };
+          chips.appendChild(btn);
+        });
+        qaStream.lastElementChild.appendChild(chips);
+        qaStream.scrollTop = qaStream.scrollHeight;
+      }
+    }catch(err){
+      typing.remove();
+      qaAdd("bot","Network error. Check backend console.");
+      console.error("[Q&A] fetch error:", err);
+    }finally{
+      qaInput.disabled = false; qaSend.disabled = false; qaInput.focus();
+    }
+  });
+})();
+
     refresh();
 
 

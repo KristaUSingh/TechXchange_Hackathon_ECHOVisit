@@ -57,7 +57,7 @@
 
       <p id="reviewHeader">VISIT SUMMARY:</p>
       
-      <form class="review-form">
+      <div class="review-form">
         <label>ALLERGIES:</label>
         <textarea id="allergiesTA" class="ta-locked" readonly></textarea>
   
@@ -90,9 +90,36 @@
 
         <hr>
 
-        <label>DO YOU HAVE ANY ADDITIONAL QUESTIONS? USE THE INTERACTIVE Q&A TO GET THE BEST ANSWER POSSIBLE!</label>
-        <textarea placeholder="ask anything"></textarea>
-      </form>
+        <!-- Interactive Q&A -->
+        <label class="qa-heading">
+          <span>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</span>
+          <span>USE THE INTERACTIVE Q&A TO GET THE BEST ANSWER POSSIBLE!</span>
+        </label>
+
+        <section id="qa" class="qa-wrap">
+          <!-- welcome card -->
+          <div class="qa-hero">
+            <div class="qa-hero-head">
+              <div class="qa-bot">🤖</div>
+              <div>
+                <div class="qa-hero-title">Welcome to Interactive Q&A</div>
+                <div class="qa-hero-sub">Ask follow-ups about your visit summary</div>
+              </div>
+            </div>
+            <div class="qa-hero-art" aria-hidden="true"></div>
+          </div>
+
+          <!-- chat stream -->
+          <div id="qa-stream" class="qa-stream" aria-live="polite"></div>
+
+          <!-- input bar -->
+          <form id="qa-form" class="qa-bar" novalidate>
+            <textarea id="qa-input" rows="1" placeholder="ask anything" aria-label="Type your question. Enter to send, Shift+Enter for a new line."></textarea>
+            <button id="qa-send" type="submit" aria-label="Send">Send</button>
+          </form>
+        </section>
+
+      <div class="review-form">
 
     <button class="scroll-up">⬆</button>
 
