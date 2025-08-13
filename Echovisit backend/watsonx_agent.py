@@ -16,16 +16,12 @@ def get_access_token(api_key):
         headers={"Content-Type": "application/x-www-form-urlencoded"}
     )
 
-    if response.status_code != 200:
-        print("Failed to get token:", response.status_code, response.text)
-        return None
-
     return response.json().get("access_token")
 
 def summarize_transcript(transcript):
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
-    SUMMARIZE_DEPLOYMENT_ID = "1d7d250b-5b6a-4e6e-a01f-f579f40e8a7b"
+    DEPLOYMENT_ID = os.getenv("SUMMARIZE_DEPLOYMENT_ID")
     VERSION = "2021-05-01"
 
     # 1) Get IAM token
@@ -41,7 +37,7 @@ def summarize_transcript(transcript):
     token = token_resp.json()["access_token"]
 
     # 2) Call the agent
-    url = f"{ENDPOINT}/ml/v4/deployments/{SUMMARIZE_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
     payload = {"messages": [{"role": "user", "content": transcript}]}
 
     resp = requests.post(
@@ -70,7 +66,7 @@ def simplify_summary(transcript):
     """
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
-    SIMPLIFY_DEPLOYMENT_ID = "ef5b963b-1277-4ea1-a4a8-c491b91c903c"
+    DEPLOYMENT_ID = os.getenv("SIMPLIFY_DEPLOYMENT_ID")
     VERSION = "2021-05-01"
 
     # 1) Get IAM token
@@ -89,7 +85,7 @@ def simplify_summary(transcript):
     token = token_resp.json()["access_token"]
 
     # 2) Call the agent (non‑streaming endpoint)
-    url = f"{ENDPOINT}/ml/v4/deployments/{SIMPLIFY_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
     payload = {"messages": [{"role": "user", "content": transcript}]}
     resp = requests.post(
         url,
@@ -131,7 +127,7 @@ def translation_summary(text, target_lang="spanish"):
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
     # <- from your screenshot
-    TRANSLATION_DEPLOYMENT_ID = "97d9e613-fa9d-4834-83ce-8c9bc1b59579"
+    DEPLOYMENT_ID = os.getenv("TRANSLATION_DEPLOYMENT_ID")
     VERSION = "2021-05-01"
 
     # 1) IAM token
@@ -150,7 +146,7 @@ def translation_summary(text, target_lang="spanish"):
     token = tok.json()["access_token"]
 
     # 2) Call the translation agent (non‑streaming)
-    url = f"{ENDPOINT}/ml/v4/deployments/{TRANSLATION_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
     # Keep the instruction light; your agent already knows how to translate.
     payload = {
         "messages": [
@@ -203,7 +199,7 @@ def questions_suggestions(summary):
     """
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
-    FOLLOWUP_DEPLOYMENT_ID = "15f999f8-46b3-4b01-bd67-be63bed4a605"  # <-- confirm this
+    DEPLOYMENT_ID = os.getenv("FOLLOWUP_DEPLOYMENT_ID")
     VERSION = "2021-05-01"
 
     # 1) IAM token
@@ -226,7 +222,7 @@ def questions_suggestions(summary):
         summary_text = str(summary)
 
     # 3) Call the agent
-    url = f"{ENDPOINT}/ml/v4/deployments/{FOLLOWUP_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
     payload = {
         "messages": [
             {
@@ -315,14 +311,14 @@ def interactive_qa(question: str, context: dict):
     """
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
-    QA_DEPLOYMENT_ID = "cddad2f5-ba1d-4b92-87bf-94011877e5ec"  # <- from your screenshot
+    DEPLOYMENT_ID = os.getenv("QA_DEPLOYMENT_ID")
     VERSION = "2021-05-01"
 
     token = get_access_token(API_KEY)
     if not token:
         return {"answer": "Auth failed.", "followups": []}
 
-    url = f"{ENDPOINT}/ml/v4/deployments/{QA_DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
 
     # Keep payload in the same "messages" style you use elsewhere.
     # We pass both the question and the visit context as one user message.
@@ -380,19 +376,14 @@ def drug_interactions(current_meds: list[str], new_meds: list[str]) -> dict:
     API_KEY = os.getenv("WATSONX_API_KEY")
     ENDPOINT = "https://us-south.ml.cloud.ibm.com"
     VERSION = "2021-05-01"
-
-    DEPLOYMENT_ID = os.getenv(
-        "WATSONX_INTERACTIONS_DEPLOYMENT_ID",
-        "61d630ea-3ca7-48ba-ba72-0befb822e15a"
-    )
-    DEPLOYMENT_URL = os.getenv(
-        "WATSONX_INTERACTIONS_DEPLOYMENT_URL",
-        f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
-    )
+    DEPLOYMENT_ID = os.getenv("DRUG_DEPLOYMENT_ID")
+       
 
     token = get_access_token(API_KEY)
     if not token:
         return {"has_issue": False, "interactions": [], "raw": {"error": "auth_failed"}}
+    
+    url = f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
 
     # Send only the data — agent prompt logic is pre-configured
     payload = {
@@ -409,7 +400,7 @@ def drug_interactions(current_meds: list[str], new_meds: list[str]) -> dict:
 
     try:
         resp = requests.post(
-            DEPLOYMENT_URL,
+            url,
             headers={
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json"

@@ -74,6 +74,7 @@ def _normalize_summary_keys(s):
 
 
 
+
 def _simp_prompt(kind: str, text: str) -> str:
     """
     Make the agent behave: short, patient-friendly, no disclaimers.
