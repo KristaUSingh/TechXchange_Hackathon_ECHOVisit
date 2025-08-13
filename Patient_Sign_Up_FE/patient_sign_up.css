@@ -182,8 +182,13 @@ footer {
   font-size: 0.9em;
   text-align: center;
 }
+.btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2em;
 
-/* From Uiverse.io by niat786 */ 
+}
 .button3 {
   border-radius: .25rem;
   text-transform: uppercase;
@@ -212,6 +217,7 @@ footer {
   padding-right: 30px;
   padding-left: 30px;
 }
+
 
 .doc-container {
   display: flex;
@@ -378,3 +384,57 @@ footer {
   transform: translateX(10px);
   box-shadow: 0 0 10px var(--checkbox-color);
 }
+
+
+/* optional: keep label + control aligned like your other rows */
+.form-row{ 
+  color: rgb(255, 255, 255);
+  display: flex; 
+  flex-direction:column; 
+  gap:6px;
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+  
+.form-row-text {
+  padding: 4px 8px;
+  padding-top: 25px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #FFDDD2;
+}
+
+/* Make the date input visually match .input-field inside .field */
+.date-like{
+  /* let the .field background show through */
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #FFDDD2;            /* same text color */
+  font: inherit;             /* same font as other fields */
+  padding: 0;                /* .field already has padding */
+  -webkit-appearance: none;  /* remove default WebKit styling */
+  appearance: none;
+}
+
+/* Tweak the inner “mm/dd/yyyy” text + segments (WebKit) */
+.date-like::-webkit-datetime-edit{ padding: 0 2px; color:#FFDDD2; }
+.date-like::-webkit-datetime-edit-text{ opacity:.7; }
+.date-like::-webkit-datetime-edit-year-field,
+.date-like::-webkit-datetime-edit-month-field,
+.date-like::-webkit-datetime-edit-day-field{ color:#FFDDD2; }
+
+/* Calendar icon color + hover (WebKit) */
+.date-like::-webkit-calendar-picker-indicator{
+  cursor:pointer;
+  opacity:.9;
+  filter: invert(86%) sepia(9%) saturate(300%) hue-rotate(330deg) brightness(105%); /* tint light on dark bg */
+}
+.date-like::-webkit-clear-button,
+.date-like::-webkit-inner-spin-button{ display:none; }
+
+/* Firefox/others fallback */
+.date-like::-moz-focus-inner{ border:0; }
+
+

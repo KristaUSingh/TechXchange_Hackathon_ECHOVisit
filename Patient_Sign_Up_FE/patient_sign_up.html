@@ -36,9 +36,16 @@
           <input placeholder="LAST NAME" class="input-field" type="text" />
         </div>
 
-        <div class="field">          
-          <input placeholder="DATE OF BIRTH" class="input-field" type="email" />
+       <div class="form-row">
+        <div class="form-row-text">
+          <label for="dob"> Date of Birth</label>
         </div>
+          <div class="field">
+          <!-- <label for="dob"> Date of Birth</label> -->
+          <input type="date" id="dob" name="dob"
+           class="input-field date-like" lang="en-US" required />
+        </div>
+      </div>
 
         <div class="field">          
           <input placeholder="EMAIL" class="input-field" type="email" />
@@ -47,6 +54,7 @@
         <div class="field">
           <input placeholder="PASSWORD" class="input-field" type="password" />
         </div>
+        
         
         <label class="checkbox-wrapper">
         <input type="checkbox" />
@@ -62,13 +70,13 @@
         </div>
         <span class="label">I am not a robot</span>
       </label>
-         <!-- <div class="btn"> -->
-            <a href="../Patient_FE/patient.html" class="button3">CONTINUE AS A PATIENT</a>
-            <!-- <button class="button3" type="button">CONTINUE AS A PATIENT</button> -->
-        <!-- </div> -->
+        
+        <div class="btn">
+            <a href="../Patient_FE/patient_login.html" class="button3">CREATE AN ACCOUNT</a> 
+        </div> 
 
 
-</div>
+    </div>
 
       </form>
     </div>
