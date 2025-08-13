@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patient Summary - EchoVisit</title>
-  <link rel="stylesheet" href="patient.css" />
+  <link rel="stylesheet" href="patient_qa.css" />
 </head>
 <body>
   <header>
@@ -24,12 +24,19 @@
 
   <main class="summary-page">
       <h1>WELCOME PATIENT ECHO!</h1>
+      <p class="mode-label">SIMPLIFIED VERSION</p>
+
 
       <div class="patient-toolbar">
-        <label class="simp-group">
-          <input type="checkbox" id="simplifyToggle" />
-          <span>Simplified version</span>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
         </label>
+
+        <!-- <label class="simp-group"> -->
+          <!-- <input type="checkbox" id="simplifyToggle" /> -->
+          <!-- <span>Simplified version</span> -->
+        <!-- </label> -->
       
         <label class="lang-group">
           <span>Language:</span>
@@ -56,8 +63,45 @@
       <hr>
 
       <p id="reviewHeader">VISIT SUMMARY:</p>
+    
       
+<div class="patient-vitals">
+  <div class="vital">
+    <span class="v-label">HEIGHT</span>
+    <textarea id="heightVal" class="ta-locked" readonly></textarea>
+    <!-- <span id="heightVal" class="v-value">5′4″</span> -->
+  </div>
+
+  <div class="vital">
+    <span class="v-label">WEIGHT</span>
+   <textarea id="weightVal" class="ta-locked" readonly></textarea>
+
+    <!-- <span id="weightVal" class="v-value">128 lb</span> -->
+  </div>
+
+  <div class="vital">
+    <span class="v-label">BLOOD PRESSURE</span>
+    <textarea id="bpVal" class="ta-locked" readonly></textarea>
+
+    <!-- <span id="bpVal" class="v-value">118/76</span> -->
+  </div>
+
+  <div class="vital">
+    <span class="v-label">BMI</span>
+    <textarea id="bmiVal" class="ta-locked" readonly></textarea>
+    <!-- <span id="bmiVal" class="v-value">21.5</span> -->
+  </div>
+
+  <div class="vital">
+    <span class="v-label">CURRENT MEDICATIONS</span>
+    <textarea id="CurrentMedicationsTA" class="ta-locked" readonly></textarea>
+  </div>
+
+</div>
+
+
       <div class="review-form">
+    
         <label>ALLERGIES:</label>
         <textarea id="allergiesTA" class="ta-locked" readonly></textarea>
   
@@ -78,12 +122,32 @@
 
         <hr>
 
-        <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label>
-        <div id="followUpControl">
-          <button type="button" id="yesFollowUp">Yes</button>
-          <button type="button" id="noFollowUp">No</button>
-        </div>
+        <!-- <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label> -->
+        <!-- <div id="followUpControl"> -->
+          <!-- <button type="button" id="yesFollowUp">Yes</button> -->
+          <!-- <button type="button" id="noFollowUp">No</button> -->
+        <!-- </div> -->
 
+        <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label>
+
+<section class="followup">
+  <div class="btn-row">
+
+<button class="btn-17">
+        <span class="text-container">
+        <span class="text">YES</span>
+        </span>
+    </button>
+
+    <button class="btn-17">
+        <span class="text-container">
+        <span class="text">NO</span>
+        </span>
+</button>
+
+    <!-- SUMMERY -->
+
+    <!-- CHATBOT -->
         <div id="followUpOutput" style="display: none; margin-top: 10px;">
           <textarea id="followUpTA" rows="6" style="width: 100%;" readonly></textarea>
         </div>        
@@ -95,7 +159,7 @@
           <span>DO YOU HAVE ANY ADDITIONAL QUESTIONS?</span>
           <span>USE THE INTERACTIVE Q&A TO GET THE BEST ANSWER POSSIBLE!</span>
         </label>
-
+        
         <section id="qa" class="qa-wrap">
           <!-- welcome card -->
           <div class="qa-hero">
@@ -124,6 +188,27 @@
     <button class="scroll-up">⬆</button>
 
     <script src="./patient.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const yesBtn = document.getElementById('fu-yes');
+  const noBtn  = document.getElementById('fu-no');
+  const box    = document.getElementById('fu-box');
+  const ta     = document.getElementById('fu-text');
+
+  yesBtn?.addEventListener('click', () => {
+    box.hidden = false;
+    yesBtn.setAttribute('aria-expanded', 'true');
+    ta.focus();
+  });
+
+  noBtn?.addEventListener('click', () => {
+    ta.value = '';
+    box.hidden = true;
+    yesBtn.setAttribute('aria-expanded', 'false');
+  });
+});
+</script>
+
   </main>
 
   <!-- LOADING OVERLAY -->
