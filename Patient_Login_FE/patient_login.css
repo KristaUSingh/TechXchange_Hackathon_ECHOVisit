@@ -142,7 +142,6 @@ body {
 
 .button3 {
   font-family: 'echovisitPara', sans-serif;
-  margin-bottom: 3em;
   padding: 0.5em;
   border-radius: 5px;
   border: none;
@@ -190,4 +189,16 @@ footer {
   padding: 50px;
   font-size: 0.9em;
   text-align: center;
+}
+
+.terms {
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
+  color:#FFDDD2;
+}
+
+.terms a{
+  font-family: 'echovisitPara', sans-serif;
+  text-transform: uppercase;
+  color:#FFDDD2;
 }
