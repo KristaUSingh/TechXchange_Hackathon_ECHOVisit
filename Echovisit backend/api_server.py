@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Response
-from watsonx_agent import simplify_summary, translation_summary, questions_suggestions, translation_summary_safe, interactive_qa
+from watsonx_agent import simplify_summary, translation_summary, questions_suggestions, translation_summary_safe, interactive_qa, drug_interactions
 import json
 from watsonx_agent import process_transcript
 from flask_cors import CORS
@@ -115,16 +115,68 @@ def transcribe_and_summarize():
     filepath = os.path.join("temp", audio.filename)
     audio.save(filepath)
 
+    # ---- helpers to read & format intake meds ------------------------------
+    def _parse_med_json(s):
+        try:
+            v = json.loads(s or "[]")
+            return v if isinstance(v, list) else []
+        except Exception:
+            return []
+
+    def _format_meds_for_summary(meds):
+        """
+        meds: list of {name, dose, frequency} (any may be missing).
+        Returns a patient‑friendly bullet list as a string.
+        """
+        lines = []
+        for m in meds:
+            if not isinstance(m, dict): 
+                # allow simple strings fallback
+                txt = str(m).strip()
+                if txt:
+                    lines.append(f"• {txt}")
+                continue
+            parts = [m.get("name"), m.get("dose"), m.get("frequency")]
+            txt = " — ".join([p for p in parts if p])
+            if txt:
+                lines.append(f"• {txt}")
+        return "\n".join(lines).strip()
+
     try:
+        # 1) Run the normal pipeline
         result = full_pipeline(filepath)
 
-        if "simplified" in result:
+        # 2) See if the transcript/agent produced a medications section
+        summary = result.get("summary") or {}
+        meds_from_summary = summary.get("medications")
+        meds_is_blank = not meds_from_summary or str(meds_from_summary).strip() in ("", "[]", "{}")
+
+        # 3) Pull intake meds (optional) from the multipart form
+        new_meds_intake     = _parse_med_json(request.form.get("new_meds_json"))
+        current_meds_intake = _parse_med_json(request.form.get("current_meds_json"))
+
+        # prefer new prescriptions, otherwise current meds from intake
+        fallback_list = new_meds_intake if len(new_meds_intake) else current_meds_intake
+        fallback_str  = _format_meds_for_summary(fallback_list)
+
+        # 4) If extractor missed meds, patch with fallback; else, if both empty → N/A
+        if meds_is_blank:
+            if fallback_str:
+                summary["medications"] = fallback_str
+            else:
+                summary["medications"] = "N/A"
+
+        result["summary"] = summary
+
+        # Optional: also mirror into simplified if you show that directly (safe default)
+        if "simplified" in result and isinstance(result["simplified"], str):
             result["simplified"] = result["simplified"].replace("\n", " ").strip()
 
         return jsonify(result)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
 
 @app.route("/simplify_all", methods=["POST"])
@@ -339,6 +391,19 @@ def qa_endpoint():
         return jsonify({"answer": "Please enter a question.", "followups": []}), 200
 
     res = interactive_qa(q, ctx)
+    return jsonify(res), 200
+
+@app.post("/check_interactions")
+def check_interactions():
+    """
+    Body: { "current_meds": [str], "new_meds": [str] }
+    Returns: { "has_issue": bool, "interactions": [...], "raw": ... }
+    """
+    data = request.get_json(force=True) or {}
+    current_meds = [str(x).strip() for x in (data.get("current_meds") or []) if str(x).strip()]
+    new_meds     = [str(x).strip() for x in (data.get("new_meds") or [])     if str(x).strip()]
+
+    res = drug_interactions(current_meds, new_meds)
     return jsonify(res), 200
 
 

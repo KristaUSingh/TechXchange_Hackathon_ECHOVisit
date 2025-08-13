@@ -366,6 +366,115 @@ def interactive_qa(question: str, context: dict):
         return {"answer": "Sorry, I ran into an issue answering that.", "followups": []}
 
 
+def drug_interactions(current_meds: list[str], new_meds: list[str]) -> dict:
+    """
+    Calls the deployed Drug-Interaction agent with the current and new meds.
+    Expects the agent to already know how to compare and return:
+      {
+        "has_issue": bool,
+        "interactions": [
+          {"pair": ["DrugA", "DrugB"], "severity": "...", "note": "..."}
+        ]
+      }
+    """
+    API_KEY = os.getenv("WATSONX_API_KEY")
+    ENDPOINT = "https://us-south.ml.cloud.ibm.com"
+    VERSION = "2021-05-01"
+
+    DEPLOYMENT_ID = os.getenv(
+        "WATSONX_INTERACTIONS_DEPLOYMENT_ID",
+        "61d630ea-3ca7-48ba-ba72-0befb822e15a"
+    )
+    DEPLOYMENT_URL = os.getenv(
+        "WATSONX_INTERACTIONS_DEPLOYMENT_URL",
+        f"{ENDPOINT}/ml/v4/deployments/{DEPLOYMENT_ID}/ai_service?version={VERSION}"
+    )
+
+    token = get_access_token(API_KEY)
+    if not token:
+        return {"has_issue": False, "interactions": [], "raw": {"error": "auth_failed"}}
+
+    # Send only the data — agent prompt logic is pre-configured
+    payload = {
+        "messages": [
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {"current_meds": current_meds, "new_meds": new_meds},
+                    ensure_ascii=False
+                )
+            }
+        ]
+    }
+
+    try:
+        resp = requests.post(
+            DEPLOYMENT_URL,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json"
+            },
+            json=payload,
+            timeout=90,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        content = (data["choices"][0]["message"]["content"] or "").strip()
+
+        # Remove code fences if present
+        content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content)
+
+        # Parse to Python object
+        try:
+            parsed = json.loads(content)
+        except Exception:
+            start, end = content.find("{"), content.rfind("}")
+            parsed = json.loads(content[start:end+1]) if start != -1 and end != -1 else {"raw": content}
+
+        # === Normalization ===
+        interactions = []
+        has_issue = False
+
+        if isinstance(parsed, dict):
+            # Top-level has_issue
+            if parsed.get("has_issue") is True:
+                has_issue = True
+
+            # Nested structure from your agent
+            if "DrugInteractions" in parsed:
+                di = parsed["DrugInteractions"]
+                if di.get("interactions_found") is True:
+                    has_issue = True
+                cand = di.get("interactions", [])
+                if isinstance(cand, list):
+                    for i in cand:
+                        if isinstance(i, dict):
+                            interactions.append({
+                                "pair": i.get("pair", []),
+                                "severity": i.get("severity", "unknown"),
+                                "note": i.get("note") or i.get("description") or ""
+                            })
+
+            # Flat interactions
+            elif "interactions" in parsed and isinstance(parsed["interactions"], list):
+                for i in parsed["interactions"]:
+                    if isinstance(i, dict):
+                        interactions.append({
+                            "pair": i.get("pair", []),
+                            "severity": i.get("severity", "unknown"),
+                            "note": i.get("note") or i.get("description") or ""
+                        })
+                if interactions:
+                    has_issue = True
+
+        return {"has_issue": has_issue, "interactions": interactions, "raw": parsed}
+
+    except Exception as e:
+        return {"has_issue": False, "interactions": [], "raw": {"error": repr(e)}}
+
+
+
+
 
 # Final pipeline
 def process_transcript(transcript):
