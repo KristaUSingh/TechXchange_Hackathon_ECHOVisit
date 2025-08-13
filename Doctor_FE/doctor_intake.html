@@ -134,9 +134,15 @@
       <input type="hidden" id="height-cm" name="height_cm" />
       <input type="hidden" id="weight-kg" name="weight_kg" />
       
+      <hr>
+      <h2>MEDICATIONS:</h2>
       <div>
         <label>Current Medications:</label>
-      
+                <!-- chips -->
+        <div id="meds-chips" class="meds-chips" aria-live="polite">
+          <div class="meds-empty">No medications added.</div>
+        </div>
+
         <!-- launcher button (visible by default) -->
         <button type="button" id="med-launch" class="submit-btn" style="width:auto; margin:8px 0 14px;">
           + Add Medication
@@ -161,17 +167,52 @@
           </div>
         </div>
       
-        <!-- chips -->
-        <div id="meds-chips" class="meds-chips" aria-live="polite">
-          <div class="meds-empty">No medications added.</div>
-        </div>
       
         <!-- hidden fields for backend -->
         <input type="hidden" id="current-meds-json"  name="current_meds_json" />
         <input type="hidden" id="current-meds-list"  name="current_meds_list" />
       </div>
       
-      
+      <!-- NEW: meds prescribed after this visit -->
+      <div>
+        <label>New Medications Prescribed After Visit:</label>
+
+        <!-- chips -->
+        <div id="newmeds-chips" class="meds-chips" aria-live="polite">
+          <div class="meds-empty">No new prescriptions added.</div>
+        </div>
+
+        <!-- launcher -->
+        <button type="button" id="newmed-launch" class="submit-btn" style="width:auto; margin:8px 0 14px;">
+          + Add New Medication
+        </button>
+
+        <!-- entry row (hidden initially) -->
+        <div class="meds-row hidden" id="newmeds-entry" hidden>
+          <div class="meds-field">
+            <label class="meds-sublabel">Name</label>
+            <input type="text" id="newmed-name-input" placeholder="e.g., Amoxicillin" />
+          </div>
+          <div class="meds-field">
+            <label class="meds-sublabel">Dose</label>
+            <input type="text" id="newmed-dose-input" placeholder="e.g., 500 mg" />
+          </div>
+          <div class="meds-field full">
+            <label class="meds-sublabel">Frequency</label>
+            <div class="meds-inline">
+              <input type="text" id="newmed-freq-input" placeholder="e.g., twice daily" />
+              <button type="button" id="newmed-add-btn" class="submit-btn">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- hidden fields for backend (optional) -->
+        <input type="hidden" id="new-meds-json"  name="new_meds_json" />
+        <input type="hidden" id="new-meds-list"  name="new_meds_list" />
+      </div>
+
+      <!-- NEW: interaction results panel -->
+      <div id="interaction-result" class="bmi-indicator" style="margin-top:10px;" aria-live="polite"></div>
 
       <button type="submit" class="submit-btn">CONTINUE ></button>
     </form>

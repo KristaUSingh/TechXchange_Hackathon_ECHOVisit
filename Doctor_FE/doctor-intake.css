@@ -214,5 +214,17 @@ input {
 }
 .med-chip .x:hover{ background:#fecaca; }
 
+/* put in doctor-intake.css */
+.indicator-ok { color:#0f5132; background:#d1e7dd; border-radius:8px; padding:8px 12px; }
+.indicator-bad { color:#842029; background:#f8d7da; border-radius:8px; padding:8px 12px; }
+.chip-bad { outline:2px solid #dc3545; }
+
+.submit-btn.is-disabled,
+.submit-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: auto; /* keep it focusable for a11y */
+}
+
 
 

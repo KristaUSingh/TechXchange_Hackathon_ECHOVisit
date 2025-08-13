@@ -1,6 +1,17 @@
 // doctor-intake.js
 document.addEventListener('DOMContentLoaded', () => {
+  const API_BASE = 'http://127.0.0.1:5000'; // adjust if needed
   const form = document.getElementById('patientForm');
+
+  // NEW: submit button control + flag
+  const submitBtn = form?.querySelector('button[type="submit"]');
+  let checkingInteractions = false;
+  function setSubmitEnabled(enabled) {
+    if (!submitBtn) return;
+    submitBtn.disabled = !enabled;
+    submitBtn.classList.toggle('is-disabled', !enabled);
+    submitBtn.setAttribute('aria-busy', (!enabled).toString());
+  }
 
   // --- Height/Weight/BMI elements
   const feetEl   = document.getElementById('height-feet');
@@ -23,7 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const bpDiaHidden = document.getElementById('bp-diastolic');
   const bpCatHidden = document.getElementById('bp-category');
 
-  // ---- Helpers -------------------------------------------------------------
+  // --- Interaction results panel
+  const interactionBox = document.getElementById('interaction-result');
+
+  // ==== helpers =============================================================
   function classifyBMI(bmi){
     if (bmi < 18.5) return { label: 'Low',    cls: 'bmi-low',  inputCls: 'low'  };
     if (bmi < 25.0) return { label: 'Normal', cls: 'bmi-ok',   inputCls: 'ok'   };
@@ -37,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return                         { label: 'High',       cls: 'bmi-high', inputCls: 'high' };
   }
 
-  // ---- Calculators ---------------------------------------------------------
+  // ==== calculators =========================================================
   function computeBMI() {
     const ft  = parseInt((feetEl && feetEl.value) || '', 10);
     const ins = parseInt((inchEl && inchEl.value) || '', 10);
@@ -104,26 +118,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ------- Current Medications: launcher -> entry -> chips -------
+  // ==== CURRENT MEDS ========================================================
   (function(){
     const launchBtn = document.getElementById('med-launch');
     const entryRow  = document.getElementById('meds-entry');
-  
+
     const nameIn = document.getElementById('med-name-input');
     const doseIn = document.getElementById('med-dose-input');
     const freqIn = document.getElementById('med-freq-input');
     const addBtn = document.getElementById('med-add-btn');
-  
+
     const chips  = document.getElementById('meds-chips');
     const hiddenJson = document.getElementById('current-meds-json');
     const hiddenList = document.getElementById('current-meds-list');
-  
+
     const meds = [];
-  
+
     // Hide fields at start
     entryRow.hidden = true;
     entryRow.classList.remove('hidden');
-  
+
     function showEntry(){
       entryRow.hidden = false;
       launchBtn.classList.add('hidden');
@@ -133,8 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
       entryRow.hidden = true;
       launchBtn.classList.remove('hidden');
     }
-    
-  
+
     function render(){
       chips.innerHTML = '';
       if (meds.length === 0){
@@ -149,47 +162,227 @@ document.addEventListener('DOMContentLoaded', () => {
         chip.querySelector('.x').addEventListener('click', () => {
           meds.splice(i,1);
           syncHidden(); render();
+          document.dispatchEvent(new CustomEvent('medsChanged'));
         });
         chips.appendChild(chip);
       });
     }
-  
+
     function syncHidden(){
       hiddenJson.value = JSON.stringify(meds);
       const flat = meds.map(m => [m.name, m.dose, m.frequency].filter(Boolean).join(' — '));
       hiddenList.value = JSON.stringify(flat);
     }
-  
+
     function addFromInputs(){
       const name = (nameIn.value || '').trim();
       const dose = (doseIn.value || '').trim();
       const freq = (freqIn.value || '').trim();
       if (!name && !dose && !freq) return;
       if (!name) { nameIn.focus(); return; }
-  
+
       meds.push({ name, dose, frequency: freq });
       nameIn.value=''; doseIn.value=''; freqIn.value='';
       syncHidden(); render();
       hideEntry();
+      document.dispatchEvent(new CustomEvent('medsChanged'));
     }
-  
+
     launchBtn?.addEventListener('click', showEntry);
     addBtn?.addEventListener('click', addFromInputs);
-  
+
     [nameIn, doseIn, freqIn].forEach(el => {
       el?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter'){ e.preventDefault(); addFromInputs(); }
         if (e.key === 'Escape'){ e.preventDefault(); hideEntry(); }
       });
     });
-  
+
     document.getElementById('patientForm')?.addEventListener('submit', syncHidden);
-  
+
     render();
   })();
-  
 
-  // ---- Live updates --------------------------------------------------------
+  // ==== NEW MEDS (after-visit prescriptions) ================================
+  let NEW_MEDS_STATE = [];
+
+  (function(){
+    const launchBtn = document.getElementById('newmed-launch');
+    const entryRow  = document.getElementById('newmeds-entry');
+
+    const nameIn = document.getElementById('newmed-name-input');
+    const doseIn = document.getElementById('newmed-dose-input');
+    const freqIn = document.getElementById('newmed-freq-input');
+    const addBtn = document.getElementById('newmed-add-btn');
+
+    const chips  = document.getElementById('newmeds-chips');
+    const hiddenJson = document.getElementById('new-meds-json');
+    const hiddenList = document.getElementById('new-meds-list');
+
+    if (entryRow) {
+      entryRow.hidden = true;
+      entryRow.classList.remove('hidden');
+    }
+
+    function showEntry(){
+      entryRow.hidden = false;
+      launchBtn.classList.add('hidden');
+      nameIn.focus();
+    }
+    function hideEntry(){
+      entryRow.hidden = true;
+      launchBtn.classList.remove('hidden');
+    }
+
+    function render(){
+      chips.innerHTML = '';
+      if (NEW_MEDS_STATE.length === 0){
+        chips.innerHTML = '<div class="meds-empty">No new prescriptions added.</div>';
+        return;
+      }
+      NEW_MEDS_STATE.forEach((m, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'med-chip';
+        const text = [m.name, m.dose, m.frequency].filter(Boolean).join(' — ');
+        chip.innerHTML = `<span>${text}</span><button type="button" class="x" aria-label="Remove">×</button>`;
+        chip.querySelector('.x').addEventListener('click', () => {
+          NEW_MEDS_STATE.splice(i,1);
+          syncHidden(); render();
+          document.dispatchEvent(new CustomEvent('newMedsChanged'));
+        });
+        chips.appendChild(chip);
+      });
+    }
+
+    function syncHidden(){
+      if (hiddenJson) hiddenJson.value = JSON.stringify(NEW_MEDS_STATE);
+      if (hiddenList) {
+        const flat = NEW_MEDS_STATE.map(m => [m.name, m.dose, m.frequency].filter(Boolean).join(' — '));
+        hiddenList.value = JSON.stringify(flat);
+      }
+    }
+
+    function addFromInputs(){
+      const name = (nameIn?.value || '').trim();
+      const dose = (doseIn?.value || '').trim();
+      const freq = (freqIn?.value || '').trim();
+      if (!name && !dose && !freq) return;
+      if (!name) { nameIn.focus(); return; }
+
+      NEW_MEDS_STATE.push({ name, dose, frequency: freq });
+      if (nameIn) nameIn.value=''; if (doseIn) doseIn.value=''; if (freqIn) freqIn.value='';
+      syncHidden(); render();
+      hideEntry();
+      document.dispatchEvent(new CustomEvent('newMedsChanged'));
+    }
+
+    launchBtn?.addEventListener('click', showEntry);
+    addBtn?.addEventListener('click', addFromInputs);
+
+    [nameIn, doseIn, freqIn].forEach(el => {
+      el?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter'){ e.preventDefault(); addFromInputs(); }
+        if (e.key === 'Escape'){ e.preventDefault(); hideEntry(); }
+      });
+    });
+
+    document.getElementById('patientForm')?.addEventListener('submit', syncHidden);
+
+    render();
+  })();
+
+  // ==== DRUG INTERACTION CHECK =============================================
+  let inflight = null;
+  async function runInteractionCheck() {
+    const currentHidden = document.getElementById('current-meds-json');
+    const currentList = (() => {
+      try { return JSON.parse(currentHidden?.value || '[]'); } catch { return []; }
+    })();
+    const currentNames = currentList.map(m => m?.name).filter(Boolean);
+    const newNames = NEW_MEDS_STATE.map(m => m.name).filter(Boolean);
+
+    // If no new meds, clear and ensure submit is enabled
+    if (!newNames.length) {
+      if (interactionBox) {
+        interactionBox.className = 'bmi-indicator';
+        interactionBox.textContent = '';
+      }
+      setSubmitEnabled(true);
+      return;
+    }
+
+    if (interactionBox) {
+      interactionBox.className = 'bmi-indicator';
+      interactionBox.textContent = 'Checking drug interactions…';
+    }
+
+    const payload = { current_meds: currentNames, new_meds: newNames };
+
+    // NEW: disable submit while checking
+    checkingInteractions = true;
+    setSubmitEnabled(false);
+
+    try {
+      inflight = fetch(`${API_BASE}/check_interactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const resp = await inflight;
+      const data = await resp.json();
+
+      if (data.has_issue && data.interactions && data.interactions.length) {
+        if (interactionBox) {
+          interactionBox.className = 'indicator-bad';
+          const lines = data.interactions.map(i => {
+            const pair = Array.isArray(i.pair) ? i.pair.join(' + ') : i.pair;
+            const sev = i.severity || 'unknown';
+            const note = i.note || i.description || '';
+            return `• ${pair} — ${sev}${note ? `: ${note}` : ''}`;
+          });
+          interactionBox.textContent = `⚠️ Potential interactions detected:\n${lines.join('\n')}`;
+        }
+        const namesToFlag = new Set(
+          data.interactions.flatMap(i => (Array.isArray(i.pair) ? i.pair : [i.pair])).map(s => String(s).toLowerCase())
+        );
+        const chipSets = [document.getElementById('meds-chips'), document.getElementById('newmeds-chips')];
+        chipSets.forEach(set => {
+          set?.querySelectorAll('.med-chip')?.forEach(chip => {
+            const nm = chip.querySelector('span')?.textContent?.split(' — ')[0]?.trim().toLowerCase();
+            if (!nm) return;
+            chip.classList.toggle('chip-bad', namesToFlag.has(nm));
+          });
+        });
+      } else {
+        if (interactionBox) {
+          interactionBox.className = 'indicator-ok';
+          interactionBox.textContent = '✅ No clinically significant interactions found.';
+        }
+        document.querySelectorAll('.med-chip.chip-bad').forEach(el => el.classList.remove('chip-bad'));
+      }
+    } catch (e) {
+      if (interactionBox) {
+        interactionBox.className = 'indicator-bad';
+        interactionBox.textContent = 'Error checking interactions. Please try again.';
+      }
+      console.error(e);
+    } finally {
+      inflight = null;
+      checkingInteractions = false;
+      setSubmitEnabled(true); // re-enable submit after check completes
+    }
+  }
+
+  function maybeRunInteractionCheck(){
+    if (inflight) return;
+    runInteractionCheck();
+  }
+
+  // re-run when either list changes
+  document.addEventListener('newMedsChanged', maybeRunInteractionCheck);
+  document.addEventListener('medsChanged',    maybeRunInteractionCheck);
+
+  // ==== Live updates for BMI/BP =============================================
   ['input','change'].forEach(evt => {
     if (bpSysEl) bpSysEl.addEventListener(evt, computeBP);
     if (bpDiaEl) bpDiaEl.addEventListener(evt, computeBP);
@@ -203,15 +396,37 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   computeBMI();
 
-  // ---- Submit handling -----------------------------------------------------
+  // ==== Submit handling ======================================================
   form.addEventListener('submit', (e) => {
+    // NEW: block submit while interaction check is running (or outstanding fetch)
+    if (checkingInteractions || inflight) {
+      e.preventDefault();
+      alert('Still checking drug interactions… please wait a moment.');
+      return;
+    }
+
     if (!form.checkValidity()) {
       e.preventDefault(); // show native messages
       return;
     }
     e.preventDefault();
+
     computeBMI();
     computeBP();
+
+    // ensure new meds hidden fields are up to date
+    const newJson = document.getElementById('new-meds-json');
+    if (newJson && (!newJson.value || newJson.value === '')) {
+      newJson.value = JSON.stringify(NEW_MEDS_STATE);
+    }
+
+    // optional stronger guard:
+    // if (interactionBox?.classList.contains('indicator-bad')) { return; }
+
+    // persist meds for the record page upload
+    sessionStorage.setItem('new_meds_json', document.getElementById('new-meds-json')?.value || '[]');
+    sessionStorage.setItem('current_meds_json', document.getElementById('current-meds-json')?.value || '[]');
+
     window.location.href = "../Record_FE/record_page.html";
   });
 });
