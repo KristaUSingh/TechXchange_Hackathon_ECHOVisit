@@ -1,6 +1,8 @@
 # TechXchange_Hackathon_ECHOVisit
 Explains the work done by our team **Beavers Intelligence Unit** for the **2025 IBM TechXchange Pre-Conference WatsonX Hackathon**. The goal of the hackathon is the use agentic AI to create an innovative solve to an everyday, real-world problem. This project was completed using Javascript, css, and html.
 
+<img width="704" height="264" alt="Image" src="https://github.com/user-attachments/assets/11b25f72-0548-44c1-b71b-0faa63b3eea3" />
+
 # Main Video
 # In-Depth Video
 
