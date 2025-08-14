@@ -60,7 +60,7 @@
         <textarea id="rawTranscript" rows="6" class="media-textarea"></textarea>
       </div>
 
-      <hr>
+  <hr class="section-line">  <!-- line below Current Medications -->
 
       <p id="reviewHeader">VISIT SUMMARY:</p>
     
@@ -91,17 +91,19 @@
     <textarea id="bmiVal" class="ta-locked" readonly></textarea>
     <!-- <span id="bmiVal" class="v-value">21.5</span> -->
   </div>
+</div>
 
-  <div class="vital">
+<hr class="section-line">  <!-- line below Current Medications -->
+
+  <div class="meds_section">
     <span class="v-label">CURRENT MEDICATIONS</span>
     <textarea id="CurrentMedicationsTA" class="ta-locked" readonly></textarea>
   </div>
 
-</div>
-
+  <hr class="section-line">  <!-- line below Current Medications -->
 
       <div class="review-form">
-    
+        
         <label>ALLERGIES:</label>
         <textarea id="allergiesTA" class="ta-locked" readonly></textarea>
   
@@ -120,7 +122,7 @@
         <label>ADDITIONAL NOTES:</label>
         <textarea id="notesTA" class="ta-locked" readonly></textarea>
 
-        <hr>
+  <hr class="section-line">  <!-- line below Current Medications -->
 
         <!-- <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label> -->
         <!-- <div id="followUpControl"> -->
@@ -129,6 +131,8 @@
         <!-- </div> -->
 
         <label>WOULD YOU LIKE TO GENERATE THREE FOLLOW-UP QUESTIONS TO ASK YOUR DOCTOR?</label>
+      
+      </div>
 
 <section class="followup">
   <div class="btn-row">
@@ -152,7 +156,7 @@
           <textarea id="followUpTA" rows="6" style="width: 100%;" readonly></textarea>
         </div>        
 
-        <hr>
+  <hr class="section-line">  <!-- line below Current Medications -->
 
         <!-- Interactive Q&A -->
         <label class="qa-heading">
