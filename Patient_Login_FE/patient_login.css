@@ -202,3 +202,11 @@ footer {
   text-transform: uppercase;
   color:#FFDDD2;
 }
+
+.cat {
+  position: absolute;
+  bottom: 0.1px;
+  left: 20px;
+  width: 100px; /* Adjust size as needed */
+  height: auto; /* Maintain aspect ratio */
+}
