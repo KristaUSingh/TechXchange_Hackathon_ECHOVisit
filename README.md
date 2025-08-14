@@ -26,9 +26,9 @@ ECHOVisit is useful because it is an easy to navigate software for users of all 
 - Patients will be provided with initial questions that they can ask
 - Patients can ask questions regarding anything pertaining to their health and doctor's visit
 > The conversation can be translated too!
+- If medication that the patient was prescribed has any **drug interactions** with any medication that the patient is currently taking it will be flagged
 ## 5. Health Flagging
 - The patient's **blood pressure** will be flagged if it is outside of a normal range
-- If medication that the patient was prescribed has any **drug interactions** with any medication that the patient is currently taking it will be flagged
 - The patient's **BMI** will be flagged if it is outside the normal or healthy range
 > Both healthcare providers and patients will have access to this information. However, the doctor can change this if necessary.
 
