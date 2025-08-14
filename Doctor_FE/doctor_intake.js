@@ -415,38 +415,52 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   computeBMI();
 
-  // ==== Submit handling ======================================================
   form.addEventListener('submit', (e) => {
-    // NEW: block submit while interaction check is running (or outstanding fetch)
     if (checkingInteractions || inflight) {
       e.preventDefault();
       alert('Still checking drug interactions… please wait a moment.');
       return;
     }
-
+  
     if (!form.checkValidity()) {
-      e.preventDefault(); // show native messages
+      e.preventDefault();
       return;
     }
     e.preventDefault();
-
+  
+    // --- BASIC INFO ---
+    const email = document.getElementById("patientEmail")?.value.trim() || "";
+    const dob = document.getElementById("patientDOB")?.value || "";
+    sessionStorage.setItem("patient_email", email);
+    sessionStorage.setItem("patient_birthday", dob);
+  
+    // --- VITALS ---
     computeBMI();
     computeBP();
-
-    // ensure new meds hidden fields are up to date
-    const newJson = document.getElementById('new-meds-json');
-    if (newJson && (!newJson.value || newJson.value === '')) {
-      newJson.value = JSON.stringify(NEW_MEDS_STATE);
-    }
-
-    // optional stronger guard:
-    // if (interactionBox?.classList.contains('indicator-bad')) { return; }
-
-    // persist meds for the record page upload
-    sessionStorage.setItem('new_meds_json', document.getElementById('new-meds-json')?.value || '[]');
-    sessionStorage.setItem('current_meds_json', document.getElementById('current-meds-json')?.value || '[]');
-
-    savePatientLinkInfo();
+    const feet = parseInt(document.getElementById("height-feet")?.value || 0, 10);
+    const inches = parseInt(document.getElementById("height-inches")?.value || 0, 10);
+    const height_in = (feet * 12) + inches;
+    const weight_lb = parseFloat(document.getElementById("weight")?.value || 0);
+    const systolic = document.getElementById("bp-sys")?.value || "";
+    const diastolic = document.getElementById("bp-dia")?.value || "";
+    const bmiValue = document.getElementById("bmi")?.value || "";
+  
+    sessionStorage.setItem("height_in", height_in);
+    sessionStorage.setItem("weight_lb", weight_lb);
+    sessionStorage.setItem("bmi", bmiValue);
+    sessionStorage.setItem("bp_systolic", systolic);
+    sessionStorage.setItem("bp_diastolic", diastolic);
+  
+    // --- CURRENT MEDS ---
+    const currentMedsJSON = document.getElementById("current-meds-json")?.value || "[]";
+    sessionStorage.setItem("current_meds_json", currentMedsJSON);
+  
+    // --- NEW MEDS ---
+    const newMedsJSON = document.getElementById("new-meds-json")?.value || "[]";
+    sessionStorage.setItem("new_meds_json", newMedsJSON);
+  
+    // Go to next page
     window.location.href = "../Record_FE/record_page.html";
   });
+  
 });

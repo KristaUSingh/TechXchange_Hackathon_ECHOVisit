@@ -219,28 +219,53 @@ window.addEventListener('DOMContentLoaded', () => {
     confirmYes.addEventListener('click', async () => {
       closeModal(confirmModal);
     
-      const patient_email = sessionStorage.getItem("patient_email");
-      const patient_birthday   = sessionStorage.getItem("patient_birthday");
-      const doctor_id     = parseInt(sessionStorage.getItem("doctor_id") || "0");
+      const patient_email    = sessionStorage.getItem("patient_email");
+      const patient_birthday = sessionStorage.getItem("patient_birthday");
+      const doctor_id        = parseInt(sessionStorage.getItem("doctor_id") || "0");
     
       if (!patient_email || !patient_birthday || !doctor_id) {
         alert("Missing patient info or doctor ID.");
         return;
       }
     
+      // Pull vitals + meds from sessionStorage
+      const vitals = {
+        bp_systolic:   sessionStorage.getItem("bp_systolic") || "",
+        bp_diastolic:  sessionStorage.getItem("bp_diastolic") || "",
+        bp_category:   sessionStorage.getItem("bp_category") || "",
+        height_cm:     sessionStorage.getItem("height_in") || "",
+        weight_kg:     sessionStorage.getItem("weight_lb") || "",
+        bmi:           sessionStorage.getItem("bmi") || ""
+      };
+    
+      const current_meds = sessionStorage.getItem("current_meds_json") || "[]";
+      const new_meds     = sessionStorage.getItem("new_meds_json") || "[]";
+    
+      // inside your confirmYes or final save button handler in review_transcript.js
       const visitPayload = {
-        patient_email,
-        patient_birthday,
-        doctor_id,
+        patient_email:    sessionStorage.getItem("patient_email"),
+        patient_birthday: sessionStorage.getItem("patient_birthday"),
+        doctor_id:        parseInt(sessionStorage.getItem("doctor_id") || "0"),
+
         transcription: document.getElementById("rawTranscript").value,
-        allergies: document.getElementById("allergiesTA").value,
-        symptoms: document.getElementById("symptomsTA").value,
-        diagnosis: document.getElementById("diagnosisTA").value,
-        medications: document.getElementById("medicationsTA").value,
-        instructions: document.getElementById("instructionsTA").value,
+        allergies:     document.getElementById("allergiesTA").value,
+        symptoms:      document.getElementById("symptomsTA").value,
+        diagnosis:     document.getElementById("diagnosisTA").value,
+        medications:   document.getElementById("medicationsTA").value,
+        instructions:  document.getElementById("instructionsTA").value,
         additional_notes: document.getElementById("notesTA").value,
         name_of_visit: "Checkup",
-        summary
+
+        // vitals from intake page
+        height_in:   parseInt(sessionStorage.getItem("height_in") || "0"),
+        weight_lb:   parseFloat(sessionStorage.getItem("weight_lb") || "0"),
+        BMI:         parseFloat(sessionStorage.getItem("bmi") || "0"),
+        systolic:    parseInt(sessionStorage.getItem("bp_systolic") || "0"),
+        diastolic:   parseInt(sessionStorage.getItem("bp_diastolic") || "0"),
+
+        // meds from intake page
+        current_medications: JSON.parse(sessionStorage.getItem("current_meds_json") || "[]"),
+        new_medications:     JSON.parse(sessionStorage.getItem("new_meds_json") || "[]")
       };
     
       try {
