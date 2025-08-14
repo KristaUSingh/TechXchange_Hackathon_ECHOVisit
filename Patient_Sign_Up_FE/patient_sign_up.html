@@ -29,11 +29,11 @@
         <h2 id="heading">PATIENT SIGN UP</h2>
 
         <div class="field">         
-          <input autocomplete="off" placeholder="FIRST NAME" class="input-field" type="text" />
+          <input id="firstName" placeholder="FIRST NAME" class="input-field" type="text" />
         </div>
 
         <div class="field">         
-          <input placeholder="LAST NAME" class="input-field" type="text" />
+          <input id="lastName" placeholder="LAST NAME" class="input-field" type="text" />
         </div>
 
        <div class="form-row">
@@ -42,17 +42,17 @@
         </div>
           <div class="field">
           <!-- <label for="dob"> Date of Birth</label> -->
-          <input type="date" id="dob" name="dob"
+          <input type="date" id="birthday" name="dob"
            class="input-field date-like" lang="en-US" required />
         </div>
       </div>
 
         <div class="field">          
-          <input placeholder="EMAIL" class="input-field" type="email" />
+          <input id="email" placeholder="EMAIL" class="input-field" type="email" />
         </div>
         
         <div class="field">
-          <input placeholder="PASSWORD" class="input-field" type="password" />
+          <input id="password" placeholder="PASSWORD" class="input-field" type="password" />
         </div>
         
         
@@ -71,9 +71,9 @@
         <span class="label">I am not a robot</span>
       </label>
         
-        <div class="btn">
-            <a href="../Patient_FE/patient_login.html" class="button3">CREATE AN ACCOUNT</a> 
-        </div> 
+        <button id="patientSignupBtn" type="button" class="button3">
+          CONTINUE AS A PATIENT
+        </button>
 
 
     </div>
@@ -83,5 +83,7 @@
   </main>
 
    <footer></footer>
+
+   <script src="./patient_sign_up.js"></script>
 </body>
 </html>
