@@ -312,7 +312,7 @@ textarea:focus {
   position: relative;
   background: none;
   cursor: pointer;
-margin-top: 2rem;}
+  margin-top: 2rem;}
 
 .border-el-btn:active {
   transform: scale(.98);
@@ -321,7 +321,7 @@ margin-top: 2rem;}
 
 .border-el-btn span {
   position: absolute;
-  background: #006D77;
+  background: #185f66;
   transition: .5s;
   box-shadow: 1px 1px 20px rgb(0, 0, 0);
 }
@@ -369,10 +369,6 @@ margin-top: 2rem;}
 .border-el-btn:hover span:nth-child(4) {
   width: 100%;
 }
-
-
-
-/*popup modal */
 
 /* Modal Styles */
 .modal {
@@ -432,7 +428,7 @@ margin-top: 2rem;}
 .modal-success {
   max-width: 560px;        /* a little wider than confirm */
   font-size: 1.3rem;       /* bigger headline feel */
-  padding: 2.2rem;
+  padding: 2.rem;
 }
 
 .modal-success p {
@@ -468,4 +464,15 @@ margin-top: 2rem;}
 /* optional: visual state on the buttons */
 .pill-active {
   outline: 2px solid #ffd6cf;
+}
+
+.section-line{
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: rgb(0, 0, 0);  /* subtle */
+  margin: 14px 0 24px;          /* space above/below the line */
+  background: linear-gradient(90deg, transparent, rgb(0, 0, 0), transparent);
+  height: 2px; border-radius: 1px;
+
 }

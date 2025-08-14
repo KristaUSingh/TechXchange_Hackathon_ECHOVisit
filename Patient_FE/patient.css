@@ -173,8 +173,25 @@ textarea:focus {
   display:flex; align-items:center; justify-content:space-between;
   gap:12px; margin:10px 0 18px;
 }
-.simp-group, .lang-group{ display:flex; align-items:center; gap:8px; }
-#langSelect{ padding:6px 10px; border-radius:8px; border:1px solid #ddd; }
+.simp-group, .lang-group{ 
+  display:flex; 
+  align-items:center; 
+  gap:8px; 
+  font-weight:500; 
+  color:#333;
+  font-size:1.1rem;
+  font-family:'echovisitPara',sans-serif;
+}
+
+#langSelect{ 
+  padding:6px 10px; 
+  border-radius:8px; 
+  border:1px solid #ddd; 
+  font-family:'echovisitPara',sans-serif;
+  font-size:1rem;
+  background-color: #ffffff;
+
+}
 
 
 #pageOverlay {
@@ -298,7 +315,6 @@ textarea:focus {
   font-weight:700;
   cursor:pointer;
 }
-
 
 .qa-hero{
   background:var(--card); border:1px solid var(--border); border-radius:14px;
@@ -429,7 +445,7 @@ textarea:focus {
 }
 
 .btn-17 {
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 99rem;
   border-width: 1px;
   padding: 0.5rem 2rem;
@@ -542,6 +558,7 @@ textarea:focus {
   font-size:.80rem;
   letter-spacing:.02em;
   opacity:.8;
+  font-weight: bolder;
 }
 
 .v-value{
@@ -569,3 +586,21 @@ textarea:focus {
 .vital{ flex-direction:row; align-items:center; }
 .v-label{ width:120px; }
 .v-value{ flex:1; }
+
+
+.section-line{
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: rgb(0, 0, 0);  /* subtle */
+  margin: 14px 0 24px;          /* space above/below the line */
+     background: linear-gradient(90deg, transparent, rgb(0, 0, 0), transparent);
+     height: 2px; border-radius: 1px;
+
+}
+
+.meds_section .v-label{
+  font-size: 1.0rem;
+  font-weight:bolder;
+  gap: 4px;
+  }
