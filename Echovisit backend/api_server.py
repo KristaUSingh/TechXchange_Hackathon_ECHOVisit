@@ -7,6 +7,8 @@ import whisper
 import os
 import re
 from auth_route import sign_up_user
+from supa_client import supabase
+from datetime import datetime
 
 whisper_model = whisper.load_model("base")
 app = Flask("ECHOVisit")
@@ -443,6 +445,82 @@ def signup_patient():
         return jsonify(result)
     except Exception as e:
         print("ERROR in signup_doctor:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/visits/vitals_minimal", methods=["POST"])
+def add_visit_vitals_minimal():
+    """
+    Insert a minimal visits row containing only:
+      - patient_ID (preferred)
+      - height_in, weight_lb, systolic, diastolic
+    BMI is computed server-side if height_in & weight_lb provided.
+    """
+    payload = request.get_json(force=True) or {}
+
+    # Resolve patient identifier
+    patient_id = payload.get("patient_ID") or payload.get("patient_id") or payload.get("user_id")
+
+    if not patient_id:
+        return jsonify({"success": False, "error": "Provide patient_ID"}), 400
+
+    # Coerce numbers
+    def _float(v):
+        try:
+            return float(v) if v is not None and str(v).strip() != "" else None
+        except:
+            return None
+    def _int(v):
+        try:
+            return int(v) if v is not None and str(v).strip() != "" else None
+        except:
+            return None
+
+    height_in = _int(payload.get("height_in") or payload.get("height"))
+    weight_lb = _int(payload.get("weight_lb") or payload.get("weight"))
+    systolic  = _int(payload.get("systolic"))
+    diastolic = _int(payload.get("diastolic"))
+
+    # compute BMI
+    bmi = None
+    if height_in and weight_lb and height_in > 0 and weight_lb >= 0:
+        bmi = round((weight_lb / (height_in * height_in)) * 703, 2)
+
+    # Build insert payload with only non-None values (match your visits column names)
+    now = datetime.utcnow().isoformat()
+    insert_row = {
+        "id": patient_id,   # change key if your column differs
+        "height": height_in,        # change key if your column name differs
+        "weight": weight_lb,
+        "BMI": bmi,
+        "systolic": systolic,
+        "diastolic": diastolic,
+    }
+    insert_row = {k: v for k, v in insert_row.items() if v is not None}
+
+    try:
+        # Attempt a simple insert (works across supabase client versions)
+        ins = supabase.table("visits").insert(insert_row).execute()
+
+        # Normalize different response shapes (dict vs object)
+        if isinstance(ins, dict):
+            ins_data = ins.get("data")
+            ins_error = ins.get("error") or ins.get("message")
+        else:
+            ins_data = getattr(ins, "data", None)
+            ins_error = getattr(ins, "error", None)
+
+        # Debug print so you can inspect the raw response in the server terminal
+        print("DEBUG: supabase insert response:", ins)
+
+        if ins_error:
+            # Supabase returned an error payload
+            return jsonify({"success": False, "error": ins_error}), 500
+
+        return jsonify({"success": True, "inserted": ins_data}), 200
+
+    except Exception as e:
+        # Catch everything so you can see the stacktrace in server terminal
+        print("visits minimal insert exception:", repr(e))
         return jsonify({"success": False, "error": str(e)}), 500
 
 
