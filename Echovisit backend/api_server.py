@@ -6,11 +6,13 @@ from flask_cors import CORS
 import whisper
 import os
 import re
+from auth_route import sign_up_user
 
 whisper_model = whisper.load_model("base")
 app = Flask("ECHOVisit")
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.config["JSON_AS_ASCII"] = False
-CORS(app)
+
 
 def transcribe_audio(file_path):
     result = whisper_model.transcribe(file_path)
@@ -406,6 +408,42 @@ def check_interactions():
 
     res = drug_interactions(current_meds, new_meds)
     return jsonify(res), 200
+
+@app.route("/signup/doctor", methods=["POST"])
+def signup_doctor():
+    try:
+        data = request.json
+        print("Received signup data:", data)
+        result = sign_up_user(
+            email=data["email"],
+            password=data["password"],
+            role="doctor",
+            name=f"{data['first_name']} {data['last_name']}",
+            clinic=data["clinic"]
+        )
+        print("Signup result:", result)
+        return jsonify(result)
+    except Exception as e:
+        print("ERROR in signup_doctor:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/signup/patient", methods=["POST"])
+def signup_patient():
+    try:
+        data = request.json
+        print("Received signup data:", data)
+        result = sign_up_user(
+            email=data["email"],
+            password=data["password"],
+            role="patient",
+            name=f"{data['first_name']} {data['last_name']}",
+            birthday=data["birthday"]
+        )
+        print("Signup result:", result)
+        return jsonify(result)
+    except Exception as e:
+        print("ERROR in signup_doctor:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 if __name__ == "__main__":
