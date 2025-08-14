@@ -9,10 +9,23 @@ import re
 from auth_route import sign_up_user
 from supa_client import supabase
 from datetime import datetime
+from datetime import datetime
+from supabase import create_client, Client
+from dotenv import load_dotenv
 
 whisper_model = whisper.load_model("base")
+
+load_dotenv()  # or just load_dotenv() if you don't use a custom env file
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+
+supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)           # for public reads
+supabase_admin = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)  # for inserts/updates
+
 app = Flask("ECHOVisit")
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500"]}})
 app.config["JSON_AS_ASCII"] = False
 
 
@@ -429,6 +442,27 @@ def signup_doctor():
         print("ERROR in signup_doctor:", str(e))
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route("/login/doctor", methods=["POST"])
+def login_doctor():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+
+    result = supabase.table("doctors").select("*").eq("email", email).execute()
+    if not result.data:
+        return jsonify({"success": False, "error": "Doctor not found"}), 401
+
+    doctor = result.data[0]
+    # TODO: Verify password hash
+    if doctor["password"] != password:
+        return jsonify({"success": False, "error": "Invalid password"}), 401
+
+    return jsonify({
+        "success": True,
+        "doctor_id": doctor["id"],
+        "name": doctor["name"]
+    })
+
 @app.route("/signup/patient", methods=["POST"])
 def signup_patient():
     try:
@@ -522,6 +556,68 @@ def add_visit_vitals_minimal():
         # Catch everything so you can see the stacktrace in server terminal
         print("visits minimal insert exception:", repr(e))
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/save_visit", methods=["POST"])
+def save_visit():
+    data = request.get_json()
+
+    # --- Normalize doctor/patient info ---
+    doctor_id = data.get("doctor_id")
+    patient_email = (data.get("patient_email") or "").strip().lower()
+    patient_birthday = (data.get("patient_birthday") or "").strip()
+
+    if not doctor_id or not patient_email or not patient_birthday:
+        return jsonify({"success": False, "error": "Missing doctor_id, patient_email, or patient_birthday"}), 400
+
+    try:
+        patient_birthday = datetime.strptime(patient_birthday, "%Y-%m-%d").date().isoformat()
+    except ValueError:
+        return jsonify({"success": False, "error": "Invalid date format"}), 400
+
+    # --- Look up patient in Supabase (case-insensitive email) ---
+    result = supabase.table("patients") \
+        .select("id") \
+        .ilike("email", patient_email) \
+        .eq("birthday", patient_birthday) \
+        .execute()
+
+    if not result.data:
+        return jsonify({"success": False, "error": "Patient not found"}), 404
+
+    patient_id = result.data[0]["id"]
+
+    # --- Build visit data ---
+    visit_data = {
+        "doctor_id": doctor_id,
+        "patient_id": patient_id,
+        "transcription": data.get("transcription"),
+        "allergies": data.get("allergies"),
+        "symptoms": data.get("symptoms"),
+        "diagnosis": data.get("diagnosis"),
+        "medications": data.get("medications"),
+        "instructions": data.get("instructions"),
+        "additional notes": data.get("additional_notes"),
+        "name of visit": data.get("name_of_visit", "Checkup"),
+    }
+
+    # --- Save visit to Supabase ---
+    insert_result = supabase.table("visits").insert(visit_data).execute()
+    if insert_result.data:
+        return jsonify({"success": True, "visit_id": insert_result.data[0]["id"]})
+    else:
+        return jsonify({"success": False, "error": "Failed to save visit"}), 500
+
+
+
+@app.route("/get_visits/<int:patient_id>", methods=["GET"])
+def get_visits(patient_id):
+    try:
+        res = supabase_admin.table("visits").select("*").eq("patient_id", patient_id).order("visit_date", desc=True).execute()
+        return jsonify({"success": True, "visits": res.data}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 
 if __name__ == "__main__":
