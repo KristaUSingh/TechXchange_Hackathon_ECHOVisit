@@ -238,7 +238,11 @@ textarea:focus {
   --border: rgba(0,0,0,.08);
 }
 
-.qa-heading span { display:block; }
+.qa-heading span { 
+  display:block; 
+  font-family:'echovisitHeader',sans-serif;
+  line-height: 1.2;
+}
 
 /* No inner border/glow when textarea is focused */
 #qa-input:focus,
