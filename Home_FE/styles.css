@@ -104,8 +104,9 @@ h1 {
 
 /* make the button small and content-sized */
 .btn{
-font-size: 1.2rem;
-  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-family: 'echovisitPara', sans-serif;
+  padding: 1.5rem 2.5rem;
   border: none;
   outline: none;
   border-radius: 0.4rem;
@@ -117,6 +118,7 @@ font-size: 1.2rem;
   transition: 0.6s;
   box-shadow: 0px 0px 6px #1f4c65;
   text-decoration: none;
+  transform: translateY(-24px); 
  /* -webkit-box-reflect: below 10px linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.4));*/
 }
 
@@ -127,8 +129,8 @@ font-size: 1.2rem;
 
 .btn:hover {
   background: rgb(2,29,78);
-  background: linear-gradient(270deg, #ffffff 0%, #A8DADC 60%);
-  color: rgb(4, 4, 38);
+  background: linear-gradient(270deg, #ffffff 0%, #ffffff 60%);
+  color: rgb(0, 0, 0);
 }
 
 /*.   */
