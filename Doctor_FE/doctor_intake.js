@@ -3,6 +3,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_BASE = 'http://127.0.0.1:5000'; // adjust if needed
   const form = document.getElementById('patientForm');
 
+    // Store patient basic info for linking visits in Supabase
+  const patientEmailInput = document.getElementById('patientEmail');
+  const patientDOBInput = document.getElementById('patientDOB');
+
+  // Whenever doctor moves forward, save these so review_transcript.js can use them
+  function savePatientLinkInfo() {
+    const email = patientEmailInput?.value.trim();
+    const dob = patientDOBInput?.value.trim();
+    if (email && dob) {
+      sessionStorage.setItem('patient_email', email);
+      sessionStorage.setItem('patient_birthday', dob);
+    }
+  }
+  
+  // NEW: store immediately when values change
+  patientEmailInput?.addEventListener('input', savePatientLinkInfo);
+  patientDOBInput?.addEventListener('input', savePatientLinkInfo);
+
+
   // NEW: submit button control + flag
   const submitBtn = form?.querySelector('button[type="submit"]');
   let checkingInteractions = false;
@@ -427,6 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem('new_meds_json', document.getElementById('new-meds-json')?.value || '[]');
     sessionStorage.setItem('current_meds_json', document.getElementById('current-meds-json')?.value || '[]');
 
+    savePatientLinkInfo();
     window.location.href = "../Record_FE/record_page.html";
   });
 });

@@ -215,4 +215,51 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!audioData && !resultRaw) {
       document.getElementById("reviewBlurb").textContent = "No recording found. Please record a summary first.";
     }
+
+    confirmYes.addEventListener('click', async () => {
+      closeModal(confirmModal);
+    
+      const patient_email = sessionStorage.getItem("patient_email");
+      const patient_birthday   = sessionStorage.getItem("patient_birthday");
+      const doctor_id     = parseInt(sessionStorage.getItem("doctor_id") || "0");
+    
+      if (!patient_email || !patient_birthday || !doctor_id) {
+        alert("Missing patient info or doctor ID.");
+        return;
+      }
+    
+      const visitPayload = {
+        patient_email,
+        patient_birthday,
+        doctor_id,
+        transcription: document.getElementById("rawTranscript").value,
+        allergies: document.getElementById("allergiesTA").value,
+        symptoms: document.getElementById("symptomsTA").value,
+        diagnosis: document.getElementById("diagnosisTA").value,
+        medications: document.getElementById("medicationsTA").value,
+        instructions: document.getElementById("instructionsTA").value,
+        additional_notes: document.getElementById("notesTA").value,
+        name_of_visit: "Checkup",
+        summary
+      };
+    
+      try {
+        const resp = await fetch("http://127.0.0.1:5000/save_visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(visitPayload)
+        });
+        const result = await resp.json();
+    
+        if (result.success) {
+          openModal(successModal);
+        } else {
+          alert("Could not submit visit: " + (result.error || "Unknown error"));
+        }
+      } catch (err) {
+        console.error("Save error:", err);
+        alert("Could not submit visit.");
+      }
+    });    
+    
 });
