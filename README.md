@@ -31,17 +31,14 @@ ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-
 - **Simplification & translation** — Generates plain-language patient summaries and translated variants on demand.  
 - **Medication checks** — Flags potential drug–drug interactions and allergy conflicts.  
 - **Health flagging** — Detects out-of-range vitals (e.g., BP, BMI) with configurable thresholds and highlights them for clinician review.  
-- **Audit & traceability** — Full change history for clinician edits and approvals.
 
 ## Patient-facing
 - **Plain-language visit summary** — Easy-to-read summary of the visit with key action items.  
 - **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated.  
-- **Share & download** — Patients can export the visit summary or share it with caregivers.
 
 ## Safety, privacy & ops
 - **Clinician control** — All patient-visible content is gated by clinician approval.  
 - **Configurable rules** — Thresholds for flags and interaction checks can be tuned per clinic.  
-- **Security & compliance** — Encrypted storage, role-based access, and audit logs (design with HIPAA/organizational requirements in mind).
 
 ---
 
