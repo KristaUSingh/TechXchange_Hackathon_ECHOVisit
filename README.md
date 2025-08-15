@@ -13,7 +13,7 @@ Explains the work done by our team **Beavers Intelligence Unit** for the **2025 
 <img width="704" height="264" alt="Image" src="https://github.com/user-attachments/assets/11b25f72-0548-44c1-b71b-0faa63b3eea3" />
 </div>
 
-ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a doctor’s quick verbal description of a case into a standardized, shareable visit summary. Clinicians simply record a brief spoken note; our system transcribes the audio, extracts and organizes clinical data (symptoms, diagnosis, meds, instructions), and rewrites it in plain language for patients. The product is a web-based platform, which includes two connected portals — one for clinicians and one for patients — and is built on Watsonx Granite models.
+ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a doctor’s quick verbal description of a case into a standardized, shareable visit summary. Clinicians simply record a brief spoken note; our system transcribes the audio, extracts and organizes clinical data (symptoms, diagnosis, meds, instructions), and rewrites it in plain language for patients. The product is a web-based platform, which includes two connected portals — one for clinicians and one for patients.
 
 
 # Why is ECHOVisit Useful?
