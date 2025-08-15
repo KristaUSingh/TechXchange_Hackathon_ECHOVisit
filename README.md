@@ -20,23 +20,23 @@ ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a d
 ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-through. Clinicians spend less time writing notes, patients get clear, plain-language visit records, translations when needed, and an integrated AI-enabled chat for asking medicine-related questions, and both parties can use the same standardized summary for follow-up, referrals, or EHR imports.
 
 # Features
-## Clinician-facing
+## Clinician-Facing
 - **Quick verbal input** — Clinicians record a short spoken case description.  
 - **Lightweight note editing & approval** — Transcribed and AI-extracted summaries are shown to clinicians for review and sign-off before publishing to the patient.  
 - **EHR-ready export** — Structured JSON output (EHR/FHIR-friendly) for integrations, referrals, and analytics.
 
-## Automated backend (what the system does)
+## Automated Backend (What the System Does)
 - **Speech → Text** — Accurate audio transcription with timestamps and speaker metadata.  
 - **Information extraction** — Pulls structured data (chief complaint, symptoms, vitals, diagnosis, medications, instructions).  
 - **Simplification & translation** — Generates plain-language patient summaries and translated variants on demand.  
 - **Medication checks** — Flags potential drug–drug interactions and allergy conflicts.  
 - **Health flagging** — Detects out-of-range vitals (e.g., BP, BMI) with configurable thresholds and highlights them for clinician review.  
 
-## Patient-facing
+## Patient-Facing
 - **Plain-language visit summary** — Easy-to-read summary of the visit with key action items.  
 - **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated.  
 
-## Safety, privacy & ops
+## Safety, Privacy & Ops
 - **Clinician control** — All patient-visible content is gated by clinician approval.  
 - **Configurable rules** — Thresholds for flags and interaction checks can be tuned per clinic.  
 
