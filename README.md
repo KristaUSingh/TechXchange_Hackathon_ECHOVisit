@@ -27,14 +27,14 @@ ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-
 
 ## Automated Backend (What the System Does)
 - **Speech → Text** — Accurate audio transcription with timestamps and speaker metadata.  
-- **Information extraction** — Pulls structured data (chief complaint, symptoms, vitals, diagnosis, medications, instructions).  
-- **Simplification & translation** — Generates plain-language patient summaries and translated variants on demand.  
+- **Information extraction** — **Watsonx AI summarization agent** pulls structured data (symptoms, vitals, diagnosis, medications, instructions, additional notes).  
+- **Simplification & translation** — Dedicated **Watsonx AI agents** generate plain-language patient summaries and translated variants on demand.  
 - **Medication checks** — Flags potential drug–drug interactions and allergy conflicts.  
 - **Health flagging** — Detects out-of-range vitals (e.g., BP, BMI) with configurable thresholds and highlights them for clinician review.  
 
 ## Patient-Facing
 - **Plain-language visit summary** — Easy-to-read summary of the visit with key action items.  
-- **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated.  
+- **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated. This chatbot is powered by a **Watsonx AI agent**  
 
 ## Safety, Privacy & Ops
 - **Clinician control** — All patient-visible content is gated by clinician approval.  
