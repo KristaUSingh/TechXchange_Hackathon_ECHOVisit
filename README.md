@@ -26,7 +26,7 @@ ECHOVisit is useful because it is an easy to navigate software for users of all 
 ## 2. Audio Transcription
 - A speech-to-text feature that provides a written form of the healthcare providers' notes
 ## 3. Translation
-- Translates the notes provided to the patient into another language other than English if needed
+- Translates the notes provided to the patient into a language other than English if needed
 ## 4. AI Agent
 - Extracts relevant information and organizes it into structured categories
 > Healthcare providers must review and approve it before the data can be viewed on the patient's portal
