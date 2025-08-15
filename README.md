@@ -43,7 +43,6 @@ ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-
 ---
 
 # Conclusion
-## Conclusion
 
 EchoVisit began as a focused hackathon prototype, but our goal is bigger: to make every outpatient visit leave behind a clear, usable record for patients and a lighter paperwork load for clinicians. By combining staff-entered vitals and clerical data with a clinician’s spoken case narrative, EchoVisit produces structured records, plain-language summaries, medication checks, and an interactive patient Q&A — all with clinician review at the center.
 
