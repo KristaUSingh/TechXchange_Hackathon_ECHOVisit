@@ -13,11 +13,11 @@ Explains the work done by our team **Beavers Intelligence Unit** for the **2025 
 <img width="704" height="264" alt="Image" src="https://github.com/user-attachments/assets/11b25f72-0548-44c1-b71b-0faa63b3eea3" />
 </div>
 
-ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a doctor’s quick verbal description of a case into a standardized, shareable visit summary. Clinicians simply record a brief spoken note; our system transcribes the audio, extracts and organizes clinical data (symptoms, diagnosis, meds, instructions), and rewrites it in plain language for patients. The product is a web-based platform, which includes two connected portals — one for clinicians and one for patients.
+ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a doctor’s quick verbal description of a case into a standardized, shareable visit summary. Clinicians simply record a brief spoken note; our system transcribes the audio, extracts and organizes clinical data (symptoms, diagnosis, meds, instructions), and rewrites it in plain language for patients, and translates it to languages other than English on patient request. The product is a web-based platform, which includes two connected portals — one for clinicians and one for patients.
 
 
 # Why is ECHOVisit Useful?
-ECHOVisit is useful because it is an easy to navigate software for users of all ages and backgrounds. It allows for healthcare providers to take notes about their patients after appointments more efficiently by allowing them to record and edit their notes. These notes can then be made available to patients. ECHOVisit has a translation option for patients who struggle with English fluency because we believe that everyone should be in control of their health journey. In addition, patients can also ask questions to an AI agent for clarification about their condition and/or medical terms.  
+ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-through. Clinicians spend less time writing notes, patients get clear, plain-language visit records, translations when needed, and an integrated AI-enabled chat for asking medicine-related questions, and both parties can use the same standardized summary for follow-up, referrals, or EHR imports.
 
 # Features
 ## 1. Voice Recording
