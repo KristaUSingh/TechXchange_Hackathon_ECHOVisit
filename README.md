@@ -43,4 +43,8 @@ ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-
 ---
 
 # Conclusion
-ECHOVisit was an idea solely created for the 2025 IBM TechXchange Pre-Conference WatsonX Hackathon. However, we truly believe in its potential and want to build upon our initial ideas. We envision adding more features to improve its practicality and efficiency to further improve user experience. Overall, it was a great experience and challenge to build ECHOVisit up to this point.
+## Conclusion
+
+EchoVisit began as a focused hackathon prototype, but our goal is bigger: to make every outpatient visit leave behind a clear, usable record for patients and a lighter paperwork load for clinicians. By combining staff-entered vitals and clerical data with a clinician’s spoken case narrative, EchoVisit produces structured records, plain-language summaries, medication checks, and an interactive patient Q&A — all with clinician review at the center.
+
+Next steps include pilot testing in clinical settings, building FHIR/EHR connectors, strengthening medication-reconciliation and safety checks, and localizing the patient experience into more languages. If you’re a developer, clinician, or potential pilot partner, please open a GitHub issue or start a discussion — we’d love to collaborate.
