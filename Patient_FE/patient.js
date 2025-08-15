@@ -1,161 +1,173 @@
-window.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://127.0.0.1:5000'; // adjust if needed
-    const lockedClass = 'ta-locked';
-  
-    // --- demo fallback (optional; keep if you want ?demo=1 to work) ---
-    const DEMO = new URLSearchParams(location.search).get('demo') === '1';
-    const FALLBACK_AUDIO = 'assets/sample.mp3';
-    const FALLBACK_PAYLOAD = {
-      transcript:
-        "This is a demo transcript. The patient reports chest tightness and shortness of breath when walking upstairs. Symptoms are worse at night.",
-      summary: {
-        allergies: "No known drug allergies",
-        symptoms: [
-          "shortness of breath when walking upstairs",
-          "chest tightness",
-          "worse at night"
-        ],
-        diagnosis: "mild asthma",
-        medication: { name: "albuterol inhaler", dose: "2 puffs", frequency: "as needed" },
-        instructions: [
-          "use inhaler as prescribed",
-          "avoid known triggers",
-          "track symptom frequency"
-        ],
-        notes: "Follow up in 4–6 weeks if symptoms persist."
+window.addEventListener('DOMContentLoaded', async () => {
+  const API_BASE = 'http://127.0.0.1:5000';
+  const params = new URLSearchParams(window.location.search);
+  const visitId = params.get('visit_id');
+  let basePayload = {};
+
+  // ---------- FETCH VISIT DATA (Supabase / backend) ----------
+  let supaVisit = null;
+  if (visitId) {
+    try {
+      const resp = await fetch(`${API_BASE}/visits/${visitId}`);
+      const data = await resp.json();
+      if (!resp.ok || !data.visit) throw new Error(data.error || "No data");
+      supaVisit = data.visit;
+
+      // Fill vitals
+      document.getElementById('heightVal').value = supaVisit.height_in ? `${supaVisit.height_in} in` : "";
+      document.getElementById('weightVal').value = supaVisit.weight_lb ? `${supaVisit.weight_lb} lb` : "";
+      document.getElementById('bpVal').value = (supaVisit.systolic && supaVisit.diastolic) ? `${supaVisit.systolic}/${supaVisit.diastolic}` : "";
+      document.getElementById('bmiVal').value = supaVisit.BMI || "";
+
+      // Fill visit summary fields (initial plain load)
+      document.getElementById('CurrentMedicationsTA').value = supaVisit["current medications"] || "";
+      document.getElementById('allergiesTA').value = supaVisit.allergies || "";
+      document.getElementById('symptomsTA').value = supaVisit.symptoms || "";
+      document.getElementById('diagnosisTA').value = supaVisit.diagnosis || "";
+      document.getElementById('medicationsTA').value = supaVisit.medications || "";
+      document.getElementById('instructionsTA').value = supaVisit.instructions || "";
+      document.getElementById('notesTA').value = supaVisit["additional notes"] || "";
+
+      // Doctor name
+      if (document.getElementById('doctorName')) {
+        document.getElementById('doctorName').textContent = supaVisit.doctor_name || "";
       }
-    };
-  
-    // audio setup
-    const audioData = sessionStorage.getItem("echovisit-audio");
-    const audioEl = document.getElementById("reviewAudio");
-    if (audioData) {
-      audioEl.src = audioData;
-      document.getElementById("playbackWrap").hidden = false;
-    } else if (DEMO) {
-      audioEl.src = FALLBACK_AUDIO;
-      document.getElementById("playbackWrap").hidden = false;
-    }
-  
-    // base payload from session or demo 
-    let raw = sessionStorage.getItem("echovisit-result");
-    let basePayload = {};
-    try { basePayload = JSON.parse(raw || "{}"); } catch {}
-    if ((!raw || !Object.keys(basePayload).length) && DEMO) {
-      basePayload = FALLBACK_PAYLOAD;
-      const blurb = document.getElementById('reviewBlurb');
-      if (blurb) blurb.textContent = "HERE'S YOUR DOCTOR'S RECORDING & TRANSCRIPT";
-    }
-  
-    // helpers
-    const get  = (o,p)=>p.split('.').reduce((x,k)=>(x&&x[k]!=null)?x[k]:undefined,o);
-    const pick = (o,paths,fb="") => { for (const p of paths){ const v=get(o,p); if(v!=null && String(v).trim()!=="") return v; } return fb; };
-  
-    function parseMaybeJSON(val) {
-      if (typeof val !== "string") return val;
-      const t = val.trim(); if (!t) return t;
-      if ((t.startsWith("[") && t.endsWith("]")) || (t.startsWith("{") && t.endsWith("}"))) {
-        try { return JSON.parse(t); } catch {}
+
+      // Patient name in welcome heading
+      const welcomeEl = document.querySelector("h1");
+      if (welcomeEl && supaVisit.patient_name) {
+        welcomeEl.textContent = `WELCOME ${supaVisit.patient_name.toUpperCase()}!`;
       }
-      return val;
+    } catch (err) {
+      console.error("Error loading visit from backend:", err);
     }
-    function formatValue(val, indent = 0) {
-      val = parseMaybeJSON(val);
-      const pad = "  ".repeat(indent);
+  }
+
+  // ---------- AUDIO SETUP ----------
+  const audioData = sessionStorage.getItem("echovisit-audio");
+  const audioEl = document.getElementById("reviewAudio");
+  if (audioData) {
+    audioEl.src = audioData;
+    document.getElementById("playbackWrap").hidden = false;
+  }
+
+  // ---------- SESSION/DEMO PAYLOAD ----------
+  let raw = sessionStorage.getItem("echovisit-result");
+  try { basePayload = JSON.parse(raw || "{}"); } catch { basePayload = {}; }
+
+  if (supaVisit) basePayload = { ...basePayload, ...supaVisit };
+
+  const hasSummaryData = basePayload?.summary 
+    && Object.values(basePayload.summary).some(v => v && String(v).trim() !== "");
+  if (!raw || !Object.keys(basePayload).length || !hasSummaryData) {
+    basePayload = supaVisit || {};
+  }
+
+  // helpers
+  const get  = (o,p)=>p.split('.').reduce((x,k)=>(x&&x[k]!=null)?x[k]:undefined,o);
+  const pick = (o,paths,fb="") => { for (const p of paths){ const v=get(o,p); if(v!=null && String(v).trim()!=="") return v; } return fb; };
   
-      if (Array.isArray(val)) {
-        return val.map(item =>
-          typeof item === "object" ? formatValue(item, indent)
-                                   : pad + "• " + formatValue(item, indent + 1)
-        ).join("\n");
-      }
-      if (val && typeof val === "object") {
-        if (val.name || val.dose || val.frequency) {
-          const order = ["name","dose","frequency"];
-          return order
-            .filter(k => val[k] != null && String(val[k]).trim() !== "")
-            .map(k => pad + "• " + k + ": " + String(val[k]))
-            .join("\n");
-        }
-        return Object.entries(val)
-          .map(([k, v]) => pad + "• " + k + ": " + (v && typeof v === "object" ? "\n"+formatValue(v, indent+1) : String(v)))
+  function parseMaybeJSON(val) {
+    if (typeof val !== "string") return val;
+    const t = val.trim(); if (!t) return t;
+    if ((t.startsWith("[") && t.endsWith("]")) || (t.startsWith("{") && t.endsWith("}"))) {
+      try { return JSON.parse(t); } catch {}
+    }
+    return val;
+  }
+  
+  function formatValue(val, indent = 0) {
+    val = parseMaybeJSON(val);
+    const pad = "  ".repeat(indent);
+
+    if (Array.isArray(val)) {
+      return val.map(item =>
+        typeof item === "object" ? formatValue(item, indent)
+                                 : pad + "• " + formatValue(item, indent + 1)
+      ).join("\n");
+    }
+    if (val && typeof val === "object") {
+      if (val.name || val.dose || val.frequency) {
+        const order = ["name","dose","frequency"];
+        return order
+          .filter(k => val[k] != null && String(val[k]).trim() !== "")
+          .map(k => pad + "• " + k + ": " + String(val[k]))
           .join("\n");
       }
-      if (typeof val === "string" && (val.includes("\n") || val.includes(","))) {
-        const parts = val.split(/\n|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s => s.trim()).filter(Boolean);
-        if (parts.length > 1) return parts.map(s => `• ${s}`).join("\n");
+      return Object.entries(val)
+        .map(([k, v]) => pad + "• " + k + ": " + (v && typeof v === "object" ? "\n"+formatValue(v, indent+1) : String(v)))
+        .join("\n");
+    }
+    if (typeof val === "string" && (val.includes("\n") || val.includes(","))) {
+      const parts = val.split(/\n|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s => s.trim()).filter(Boolean);
+      if (parts.length > 1) return parts.map(s => `• ${s}`).join("\n");
+    }
+    return String(val);
+  }
+
+  function toViewData(payload) {
+    return {
+      transcript:  pick(payload, ["summary.transcript", "transcript", "text"], ""),
+      allergies:   pick(payload, ["summary.allergies", "allergies"], ""),
+      symptoms:    pick(payload, ["summary.symptoms", "symptoms"], ""),
+      diagnosis:   pick(payload, ["summary.diagnosis", "diagnosis"], ""),
+      medications: pick(payload, ["summary.medication", "summary.medications", "medications", "medication"], ""),
+      instructions:pick(payload, ["summary.follow-up-instructions", "summary.instructions", "summary.follow_up_instructions", "instructions"], ""),
+      notes:       pick(payload, ["summary.notes", "summary.additional notes", "notes", "additional notes"], "")
+    };
+  }
+
+  const byId = id => document.getElementById(id);
+  function setVal(id, val, {bullet=true} = {}) {
+    const el = byId(id);
+    if (!el) return;
+    if (val == null || String(val).trim() === "") { el.value = ""; return; }
+    el.value = bullet ? formatValue(val) : parseMaybeJSON(val);
+    el.readOnly = true;
+    el.classList.add('ta-locked');
+  }
+  function render(view) {
+    setVal("rawTranscript", view.transcript, { bullet:false });
+    byId("transcriptionWrap").hidden = !view.transcript;
+    setVal("allergiesTA",    view.allergies);
+    setVal("symptomsTA",     view.symptoms);
+    setVal("diagnosisTA",    view.diagnosis);
+    setVal("medicationsTA",  view.medications);
+    setVal("instructionsTA", view.instructions);
+    setVal("notesTA",        view.notes);
+  }
+
+  const originalView = toViewData(basePayload);
+  render(originalView);
+
+  // ---------- API + cache ----------
+  const cache = new Map();
+  cache.set('original|en', basePayload);
+
+  async function postJSON(url, body){
+    const resp = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
+    return resp.json();
+  }
+
+  function makeBaseSource() {
+    return {
+      transcript: originalView.transcript || "",
+      summary: {
+        allergies:   originalView.allergies   ?? "",
+        symptoms:    originalView.symptoms    ?? "",
+        diagnosis:   originalView.diagnosis   ?? "",
+        medications: originalView.medications ?? "",
+        instructions:originalView.instructions?? "",
+        notes:       originalView.notes       ?? ""
       }
-      return String(val);
-    }
-  
-    function toViewData(payload) {
-      const summary = pick(payload, ["summary"], null) || payload;
-      return {
-        transcript:  pick(payload, ["transcript","text","summary.transcript"]),
-        allergies:   pick(summary, ["allergies"], ""),
-        symptoms:    pick(summary, ["symptoms"], ""),
-        diagnosis:   pick(summary, ["diagnosis"], ""),
-        medications: pick(summary, ["medication","medications"], ""),
-        instructions:pick(summary, ["follow-up-instructions","instructions","follow_up_instructions"], ""),
-        notes:       pick(summary, ["notes","additional_notes"], "")
-      };
-    }
-  
-    const originalView = toViewData(basePayload);
-  
-    // render
-    const byId = id => document.getElementById(id);
-    function setVal(id, val, {bullet=true} = {}) {
-      const el = byId(id);
-      if (!el) return;
-      if (val == null || String(val).trim() === "") { el.value = ""; return; }
-      el.value = bullet ? formatValue(val) : parseMaybeJSON(val);
-      el.readOnly = true;
-      el.classList.add(lockedClass);
-    }
-    function render(view) {
-      setVal("rawTranscript", view.transcript, { bullet:false });
-      document.getElementById("transcriptionWrap").hidden = !view.transcript;
-  
-      setVal("allergiesTA",    view.allergies);
-      setVal("symptomsTA",     view.symptoms);
-      setVal("diagnosisTA",    view.diagnosis);
-      setVal("medicationsTA",  view.medications);
-      setVal("instructionsTA", view.instructions);
-      setVal("notesTA",        view.notes);
-    }
-  
-    // initial paint
-    render(originalView);
-  
-    // ---------- API + cache ----------
-    const cache = new Map(); // key: `${mode}|${lang}`, value: payload shape {transcript, summary:{...}}
-    cache.set('original|en', basePayload);
-  
-    async function postJSON(url, body){
-      const resp = await fetch(url, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(body)
-      });
-      if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
-      return resp.json();
-    }
-  
-    function makeBaseSource() {
-      return {
-        transcript: originalView.transcript || "",
-        summary: {
-          allergies:   originalView.allergies   ?? "",
-          symptoms:    originalView.symptoms    ?? "",
-          diagnosis:   originalView.diagnosis   ?? "",
-          medications: originalView.medications ?? "",
-          instructions:originalView.instructions?? "",
-          notes:       originalView.notes       ?? ""
-        }
-      };
-    }
-  
+    };
+  }
+
     async function getSimplified() {
       const key = 'simplified|en';
       if (cache.has(key)) return cache.get(key);
@@ -164,11 +176,11 @@ window.addEventListener('DOMContentLoaded', () => {
       cache.set(key, data);
       return data;
     }
-  
+
     async function getTranslated(lang, mode /* 'original'|'simplified' */) {
       const key = `${mode}|${lang}`;
       if (cache.has(key)) return cache.get(key);
-  
+
       const src = (mode === 'simplified') ? await getSimplified() : makeBaseSource();
       const data = await postJSON(`${API_BASE}/translate_all`, {
         lang,
@@ -179,11 +191,11 @@ window.addEventListener('DOMContentLoaded', () => {
       cache.set(key, data);
       return data;
     }
-  
+
     // UI wiring 
     const simplifyToggle = byId('simplifyToggle');
     const langSelect     = byId('langSelect');
-  
+
     async function refresh() {
       const lang = langSelect.value || 'en';
       const simp = simplifyToggle.checked;
@@ -204,11 +216,11 @@ window.addEventListener('DOMContentLoaded', () => {
       try {
         if (lang === 'en' && !simp) {
           render(toViewData(cache.get('original|en')));
-          hideOverlay(); // ✅ ADD THIS
+          hideOverlay(); // ADD THIS
         } else if (lang === 'en' && simp) {
           const simpData = await getSimplified();
           render(toViewData(simpData));
-          hideOverlay(); // ✅ ADD THIS
+          hideOverlay(); // ADD THIS
         } else {
           // any non-English
           const mode = simp ? 'simplified' : 'original';
@@ -231,10 +243,10 @@ window.addEventListener('DOMContentLoaded', () => {
         hideOverlay(); // hide even on failure
       }
     }    
-  
+
     simplifyToggle.addEventListener('change', refresh);
     langSelect.addEventListener('change', refresh);
-  
+
     // Allow URL presets (?lang=es&simp=1)
     const urlLang = new URLSearchParams(location.search).get('lang');
     const urlSimp = new URLSearchParams(location.search).get('simp');
@@ -354,7 +366,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     // === Interactive Q&A (safe wrapper) ===
-(function QAModule(){
+  (function QAModule(){
   const API = (typeof API_BASE === "string" && API_BASE) || "http://127.0.0.1:5000";
 
   const qaStream = document.getElementById("qa-stream");
@@ -454,10 +466,7 @@ window.addEventListener('DOMContentLoaded', () => {
       qaInput.disabled = false; qaSend.disabled = false; qaInput.focus();
     }
   });
-})();
+  })();
 
     refresh();
-
-
-  });
-  
+});
