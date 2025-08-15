@@ -20,25 +20,30 @@ ECHOVisit is an AI agent, powered by WatsonX AI's Granite models, that turns a d
 ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-through. Clinicians spend less time writing notes, patients get clear, plain-language visit records, translations when needed, and an integrated AI-enabled chat for asking medicine-related questions, and both parties can use the same standardized summary for follow-up, referrals, or EHR imports.
 
 # Features
-## 1. Voice Recording
-- Healthcare providers can record their notes after appointments for maximum efficiency
-> Simple notes such as vitals can be typed into the portal
-## 2. Audio Transcription
-- A speech-to-text feature that provides a written form of the healthcare providers' notes
-## 3. Translation
-- Translates the notes provided to the patient into a language other than English if needed
-## 4. AI Agent
-- Extracts relevant information and organizes it into structured categories
-> Healthcare providers must review and approve it before the data can be viewed on the patient's portal
-- Patients will be provided an easy to understand summary of the notes from their visit
-- Patients will be provided with initial questions that they can ask
-- Patients can ask questions regarding anything pertaining to their health and doctor's visit
-> The conversation can be translated too!
-- If medication that the patient was prescribed has any **drug interactions** with any medication that the patient is currently taking it will be flagged
-## 5. Health Flagging
-- The patient's **blood pressure** will be flagged if it is outside of a normal range
-- The patient's **BMI** will be flagged if it is outside the normal or healthy range
-> Both healthcare providers and patients will have access to this information. However, the doctor can change this if necessary.
+## Clinician-facing
+- **Quick verbal input** — Clinicians record a short spoken case description.  
+- **Lightweight note editing & approval** — Transcribed and AI-extracted summaries are shown to clinicians for review and sign-off before publishing to the patient.  
+- **EHR-ready export** — Structured JSON output (EHR/FHIR-friendly) for integrations, referrals, and analytics.
+
+## Automated backend (what the system does)
+- **Speech → Text** — Accurate audio transcription with timestamps and speaker metadata.  
+- **Information extraction** — Pulls structured data (chief complaint, symptoms, vitals, diagnosis, medications, instructions).  
+- **Simplification & translation** — Generates plain-language patient summaries and translated variants on demand.  
+- **Medication checks** — Flags potential drug–drug interactions and allergy conflicts.  
+- **Health flagging** — Detects out-of-range vitals (e.g., BP, BMI) with configurable thresholds and highlights them for clinician review.  
+- **Audit & traceability** — Full change history for clinician edits and approvals.
+
+## Patient-facing
+- **Plain-language visit summary** — Easy-to-read summary of the visit with key action items.  
+- **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated.  
+- **Share & download** — Patients can export the visit summary or share it with caregivers.
+
+## Safety, privacy & ops
+- **Clinician control** — All patient-visible content is gated by clinician approval.  
+- **Configurable rules** — Thresholds for flags and interaction checks can be tuned per clinic.  
+- **Security & compliance** — Encrypted storage, role-based access, and audit logs (design with HIPAA/organizational requirements in mind).
+
+---
 
 # Conclusion
 ECHOVisit was an idea solely created for the 2025 IBM TechXchange Pre-Conference WatsonX Hackathon. However, we truly believe in its potential and want to build upon our initial ideas. We envision adding more features to improve its practicality and efficiency to further improve user experience. Overall, it was a great experience and challenge to build ECHOVisit up to this point.
