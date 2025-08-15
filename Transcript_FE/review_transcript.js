@@ -60,7 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   
     // ----- Modal wiring -----
-    const continueBtn  = document.querySelector('.border-el-btn');
+    const continueBtn  = document.getElementById('submit-btn');
     const confirmModal = document.getElementById('confirmationModal');
     const successModal = document.getElementById('successModal');
     const confirmYes   = document.getElementById('confirmYes');
@@ -76,8 +76,8 @@ window.addEventListener('DOMContentLoaded', () => {
     confirmNo.addEventListener('click', () => closeModal(confirmModal));
     window.addEventListener('click', e => { if (e.target === confirmModal) closeModal(confirmModal); if (e.target === successModal) closeModal(successModal); });
     window.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(confirmModal); closeModal(successModal); }});
-    goMenuBtn.addEventListener('click', () => { window.location.href = 'menu.html'; });
-    signOutBtn.addEventListener('click', () => { window.location.href = 'login.html'; });
+    goMenuBtn.addEventListener('click', () => { window.location.href = '../Home_FE/home.html'; });
+    signOutBtn.addEventListener('click', () => { window.location.href = '../Doc_or_Patient_FE/doc_or_patient.html'; });
   
     // ===== Load audio + results from sessionStorage =====
     const audioData = sessionStorage.getItem("echovisit-audio");
@@ -204,6 +204,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (data.transcript) {
       setVal("rawTranscript", data.transcript);
       document.getElementById("transcriptionWrap").hidden = false;
+
+      const transcriptTA = document.getElementById("rawTranscript");
+      if (transcriptTA && transcriptTA.value.trim()) {
+        transcriptTA.readOnly = true;
+        transcriptTA.classList.add("ta-locked");
+      }
     }
     setVal("allergiesTA",    data.allergies);
     setVal("symptomsTA",     data.symptoms);
@@ -254,7 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
         medications:   document.getElementById("medicationsTA").value,
         instructions:  document.getElementById("instructionsTA").value,
         additional_notes: document.getElementById("notesTA").value,
-        name_of_visit: "Checkup",
+        name_of_visit: document.getElementById("visit-name").value,
 
         // vitals from intake page
         height_in:   parseInt(sessionStorage.getItem("height_in") || "0"),

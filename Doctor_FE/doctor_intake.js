@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_BASE = 'http://127.0.0.1:5000'; // adjust if needed
   const form = document.getElementById('patientForm');
 
+  const welcomeEl = document.querySelector("h1");
+  const doctorName = sessionStorage.getItem("doctor_name"); // or however you store it
+  if (welcomeEl && doctorName) {
+    welcomeEl.textContent = `WELCOME DR. ${doctorName.toUpperCase()}!`;
+  }
+
     // Store patient basic info for linking visits in Supabase
   const patientEmailInput = document.getElementById('patientEmail');
   const patientDOBInput = document.getElementById('patientDOB');

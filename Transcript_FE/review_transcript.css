@@ -39,6 +39,15 @@ h1 {
   font-size: 1.0rem;
 }
 
+#visit_name {
+  font-family: 'echovisitHeader', sans-serif;
+  display: block;
+  margin: 1.5rem 0 0.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 1%;
+}
+
 .media-label { 
   font-family: 'echovisitPara', sans-serif;
   font-size: 1.0rem;
@@ -100,6 +109,21 @@ h1 {
   font-size: 2.0rem;
   margin-bottom: 0.5rem;
 }
+
+input {
+  width: 50%;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.review-container label {
+  font-family: 'echovisitPara', sans-serif;
+  font-size: 1.0rem;
+  margin-bottom: 0.5rem;
+}
+
 .review-container .subtitle {
   font-size: 1rem;
   margin-bottom: 2rem;
@@ -421,6 +445,22 @@ textarea:focus {
 
 .modal-buttons button:hover {
   background-color: #444;
+}
+
+/* Button */
+#submit-btn {
+  margin-top: 1rem; 
+  background-color: #ff917a;
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #e07b67;
 }
 
 

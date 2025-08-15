@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'echovisitHeader'; /* Choose a descriptive name for your font */
   src: url('../fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype'); /* Path to your font file */
-  font-weight: normal; /* Optional: define font weight */
+  font-weight: 100 900; /* variable range */
   font-style: normal; /* Optional: define font style */
   font-display: swap; /* Optional: improve font loading experience */
 }
@@ -17,7 +17,7 @@
 
 body {
   margin: 0;
-  background-color: #fde0d9;
+  background-color: transparent;
   color: #111;
 }
 
@@ -80,24 +80,73 @@ h1 {
   font-weight: bold;
 }
 
+.logo {
+  height: 40px;
+}
+/*
 .get_started_button {
+  font-family: 'echovisitPara', sans-serif;
   text-align: right;
   padding: 20px 20px;
   background-color: #f0cfcf;
   font-size: 1.0em;
   border: none;
+  border-radius: 5px;
+
+
+}
+*/
+/* center the button */
+.hero-cta{
+  display:flex;
+  justify-content:center;
 }
 
+/* make the button small and content-sized */
+.btn{
+  font-size: 1.2rem;
+  font-family: 'echovisitPara', sans-serif;
+  padding: 1.5rem 2.5rem;
+  border: none;
+  outline: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: rgb(14, 14, 26);
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  transition: 0.6s;
+  box-shadow: 0px 0px 6px #1f4c65;
+  text-decoration: none;
+  transform: translateY(-24px); 
+ /* -webkit-box-reflect: below 10px linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.4));*/
+}
+
+
+.btn:active {
+  scale: 0.92;
+}
+
+.btn:hover {
+  background: rgb(2,29,78);
+  background: linear-gradient(270deg, #ffffff 0%, #ffffff 60%);
+  color: rgb(0, 0, 0);
+}
+
+/*.   */
+
 .echo {
+  font-family: 'echovisitHeader', sans-serif;
   color: #7ebfb4;
-  font-weight: bold;
-  font-size: 2.5em;
+  font-weight: 700;
+  font-size: 3.5em;
 
 }
 .visit {
-  color: #27564d;
-  font-weight: bold;
-  font-size: 2.5em;
+  font-family: 'echovisitHeader', sans-serif;
+  color: #1d8c96;
+  font-weight: 700;
+  font-size: 3.5em;
 }
 
 .echo-visit {
@@ -105,14 +154,15 @@ h1 {
   justify-content: center;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 10%;
-  padding-top: 10%;
+  gap: 20px;
+  padding-bottom: 5%;
+  padding-top: 5%;
+  gap : 12px;
 }
 
-.logo {
-  padding: left 5px;
-  width: 400px;
+.echo-visit .logo {
+  display: block;
+  width: 200px;
   height: auto;
 
 }
@@ -171,6 +221,14 @@ h1 {
 }
 .features div {
   width: 45%;
+}
+
+p {
+  font-family: 'echovisitPara', sans-serif;
+}
+
+li {
+  font-family: 'echovisitPara', sans-serif;
 }
 
 footer {

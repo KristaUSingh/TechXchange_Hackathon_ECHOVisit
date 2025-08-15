@@ -24,9 +24,13 @@
   </header>
 
   <main class="review-container">
-    <h1>WELCOME DR. ECHO!</h1>
 
         <!-- Media + transcript block (inserted before the review blurb) -->
+    <div>
+      <label for="visit-name">ENTER VISIT SUMMARY NAME:</label>
+      <input type="text" id="visit-name" required/>
+    </div>
+
     <p id="reviewBlurb">HERE’S YOUR RECORDING & TRANSCRIPTION:</p><br>
     <div id="playbackWrap" class="media-block" hidden>
       <audio id="reviewAudio" controls></audio>
@@ -68,15 +72,8 @@
 
 
 
-      <button class="border-el-btn modal-trigger" type="button">
-  CONTINUE
-  <span class="b1"></span>
-  <span class="b2"></span>
-  <span class="b3"></span>
-  <span class="b4"></span>
-</button>
+      <button type="button" id="submit-btn">CONTINUE ></button>
  
-
       <!-- <button class="submit-btn">CONTINUE --&gt;</button> -->
     </form>
   </main>
@@ -96,7 +93,7 @@
   <div class="modal-content modal-success">
     <p id="successTitle"><strong>YOUR SUMMARY HAS BEEN SUBMITTED!</strong></p>
     <div class="modal-buttons">
-      <button id="goMenuBtn">GO TO MENU</button>
+      <button id="goMenuBtn">GO TO HOME PAGE</button>
       <button id="signOutBtn">SIGN OUT</button>
     </div>
   </div>
