@@ -6,6 +6,7 @@
 Explains the work done by our team **Beavers Intelligence Unit** for the **2025 IBM TechXchange Pre-Conference WatsonX Hackathon**. The goal of the hackathon is the use agentic AI to create an innovative solve to an everyday, real-world problem. This project was completed using Javascript, css, and html.
 
 # Video
+https://vimeo.com/1110564140
 
 # What is ECHOVisit?
 <div align="center">
