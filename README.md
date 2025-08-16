@@ -14,37 +14,57 @@ https://vimeo.com/1110564140
 <img width="704" height="264" alt="Image" src="https://github.com/user-attachments/assets/11b25f72-0548-44c1-b71b-0faa63b3eea3" />
 </div>
 
-ECHOVisit is a web-based platform, powered by IBM watsonx.ai Granite model, that turns a doctor’s quick verbal description of a case into a standardized, shareable visit summary. Doctors can record their notes about their patients' visits. Our system can then transcribe the audio, extract and organize clinical data (symptoms, diagnosis, medication, instructions, etc.), rewrite it in plain language for patients, and translate it to languages other than English on patient request. The platform includes two connected portals — one for doctors and one for patients.
+ECHOVisit is a web-based platform, powered by IBM watsonx.ai Granite model, that transforms complex medical notes into clear, patient-friendly visit summaries. With two connected portals—one for doctors and one for patients—EchoVisit helps doctors save time on documentation while giving patients the clarity they deserve about their health.
 
+--
 
 # Why is ECHOVisit Useful?
-ECHOVisit cuts clinicians’ documentation overhead and improves patient follow-through. Doctors spend less time writing notes, patients receive clear, plain-language visit records, translations when needed, and an integrated AI-enabled chat for asking medicine-related questions. 
+Medical communication is broken:
+- **Doctors face overwhelming documentation workloads.**
+- **Patients leave confused, struggling with medical jargon, poor handwriting, or language barriers.**
+EchoVisit bridges this gap. By combining transcription, summarization, simplification, translation, and interactive Q&A into a single workflow, we eliminate confusion for patients and stress for doctors.
+
+--- 
 
 # Features
-1. Clinician-Facing
-- **Quick verbal input** — Clinicians record a short spoken case description.  
-- **Lightweight note editing & approval** — Transcribed and AI-extracted summaries are shown to clinicians for review and sign-off before publishing to the patient.  
-- **EHR-ready export** — Structured JSON output (EHR/FHIR-friendly) for integrations, referrals, and analytics.
+1. Doctor Portal
+- **Record a short audio note after each visit.**
+- **AI agents transcribe, structure into EMR fields, flag abnormal vitals, and check drug interactions.**
+- **Doctor reviews and approves before sending to patient.**
 
-2. Automated Backend (What the System Does)
-- **Speech → Text** — Accurate audio transcription with timestamps and speaker metadata.  
-- **Information extraction** — **Watsonx AI summarization agent** pulls structured data (symptoms, vitals, diagnosis, medications, instructions, additional notes).  
-- **Simplification & translation** — Dedicated **Watsonx AI agents** generate plain-language patient summaries and translated variants on demand.  
-- **Medication checks** — Flags potential drug–drug interactions and allergy conflicts.  
-- **Health flagging** — Detects out-of-range vitals (e.g., BP, BMI) with configurable thresholds and highlights them for clinician review.  
+2. Patient Portal
+- **View summaries simplified into layman’s terms.**
+- **Translate instantly into multiple languages.**
+- **Access AI-generated follow-up questions.**
+- **Chat with an Interactive Q&A Agent for visit-specific answers.**
 
-3. Patient-Facing
-- **Plain-language visit summary** — Easy-to-read summary of the visit with key action items.  
-- **Integrated AI chat** — Patients can ask follow-up questions about diagnoses, meds, or instructions; responses can be translated. This chatbot is powered by a **Watsonx AI agent**  
+3. Agentic AI Pipeline
+- **Summarization Agent** → EMR-ready structured notes.
+- **Simplification Agent** → Jargon-free, patient-friendly language.
+- **Translation Agent** → Multi-language support.
+- **Follow-up Generator** → Predicts patient questions.
+- **Interactive Q&A** → Answers in context, prompts doctor when needed.
+- **Drug Interaction Agent** → Flags medication conflicts.
 
-4. Safety, Privacy & Ops
-- **Clinician control** — All patient-visible content is gated by clinician approval.  
-- **Configurable rules** — Thresholds for flags and interaction checks can be tuned per clinic.  
+---
+
+# Technical Overview
+**Backend:** Flask, Supabase (PostgreSQL with row-level security & auth).
+**Transcription:** OpenAI Whisper
+**AI Agents:** Built and prompt-tuned in IBM watsonx.ai (Granite-3-3-8b-instruct)
+**Agentic AI:** Orchestrated pipeline with fallbacks (e.g., if Q&A agent is uncertain, patient is prompted to ask their doctor).
+
+Datasets:
+- **Medical glossary for simplification.**
+- **EMR-compatible schema for structuring visit data.**
+- **Common health questions dataset for improving Q&A accuracy.**
 
 ---
 
 # Conclusion
 
-EchoVisit began as a focused hackathon prototype, but our goal is bigger: to make every outpatient visit leave behind a clear, usable record for patients and a lighter paperwork load for clinicians. By combining staff-entered vitals and clerical data with a clinician’s spoken case narrative, EchoVisit produces structured records, plain-language summaries, medication checks, and an interactive patient Q&A — all with clinician review at the center.
+EchoVisit is the foundation of something bigger. We imagine this platform not only supporting doctors in their daily workflows but also extending into ambulance settings, where EMTs could use it for rapid, on-scene entry of electronic medical records. By turning complex notes into clear, structured, and patient-friendly summaries, EchoVisit reduces burnout for providers and gives patients the understanding they need to take control of their care.
 
-Next steps include pilot testing in clinical settings, building FHIR/EHR connectors, strengthening medication-reconciliation and safety checks, and localizing the patient experience into more languages. If you’re a developer, clinician, or potential pilot partner, please open a GitHub issue or start a discussion — we’d love to collaborate.
+While this version is a proof-of-concept, the potential of watsonx.ai makes us confident that EchoVisit can continue to grow into a scalable solution for healthcare communication.
+
+Thank you for checking out EchoVisit! We hope to see you at the watsonx Hackathon finals in Orlando, Florida!
