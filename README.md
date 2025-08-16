@@ -55,7 +55,7 @@ EchoVisit bridges this gap. By combining transcription, summarization, simplific
 - **AI Agents:** Built and prompt-tuned in IBM watsonx.ai (Granite-3-3-8b-instruct)
 - **Agentic AI:** Orchestrated pipeline with fallbacks (e.g., if Q&A agent is uncertain, patient is prompted to ask their doctor).
 
-### Datasets:
+  ### Datasets:
 - Medical glossary for simplification.
 - EMR-compatible schema for structuring visit data.
 - Common health questions dataset for improving Q&A accuracy.
