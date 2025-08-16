@@ -14,12 +14,14 @@
   font-display: swap; /* Optional: improve font loading experience */
 }
 
+
 body {
   margin: 0;
   padding: 0;
   background-color:  #FFDDD2;
   font-family: 'Segoe UI', sans-serif;
 }
+
 
 .form-wrapper {
   height: calc(100vh - 80px); /* Adjust based on navbar height */

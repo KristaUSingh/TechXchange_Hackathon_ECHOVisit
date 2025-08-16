@@ -79,13 +79,21 @@ window.addEventListener('DOMContentLoaded', async () => {
   function formatValue(val, indent = 0) {
     val = parseMaybeJSON(val);
     const pad = "  ".repeat(indent);
-
+  
+    // Handle arrays
     if (Array.isArray(val)) {
+      // If it's an array of objects with name/dose/frequency, format each
+      if (val.length && val.every(item => typeof item === "object" && (item.name || item.dose || item.frequency))) {
+        return val.map(item => formatValue(item, indent)).join("\n");
+      }
+      // Otherwise treat like a normal bullet list
       return val.map(item =>
         typeof item === "object" ? formatValue(item, indent)
                                  : pad + "• " + formatValue(item, indent + 1)
       ).join("\n");
     }
+  
+    // Handle medication object
     if (val && typeof val === "object") {
       if (val.name || val.dose || val.frequency) {
         const order = ["name","dose","frequency"];
@@ -98,19 +106,24 @@ window.addEventListener('DOMContentLoaded', async () => {
         .map(([k, v]) => pad + "• " + k + ": " + (v && typeof v === "object" ? "\n"+formatValue(v, indent+1) : String(v)))
         .join("\n");
     }
+  
+    // Handle strings with separators
     if (typeof val === "string" && (val.includes("\n") || val.includes(","))) {
       const parts = val.split(/\n|,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s => s.trim()).filter(Boolean);
       if (parts.length > 1) return parts.map(s => `• ${s}`).join("\n");
     }
+  
     return String(val);
   }
+  
 
   function toViewData(payload) {
     return {
-      transcript:  pick(payload, ["summary.transcript", "transcript", "text"], ""),
+      transcript: pick(payload, ["summary.transcript", "transcription", "transcript", "text"], ""),
       allergies:   pick(payload, ["summary.allergies", "allergies"], ""),
       symptoms:    pick(payload, ["summary.symptoms", "symptoms"], ""),
       diagnosis:   pick(payload, ["summary.diagnosis", "diagnosis"], ""),
+      current_meds: pick(payload, ["current medications"], ""),  // ← add this
       medications: pick(payload, ["summary.medication", "summary.medications", "medications", "medication"], ""),
       instructions:pick(payload, ["summary.follow-up-instructions", "summary.instructions", "summary.follow_up_instructions", "instructions"], ""),
       notes:       pick(payload, ["summary.notes", "summary.additional notes", "notes", "additional notes"], "")
@@ -131,6 +144,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     byId("transcriptionWrap").hidden = !view.transcript;
     setVal("allergiesTA",    view.allergies);
     setVal("symptomsTA",     view.symptoms);
+    setVal("CurrentMedicationsTA", view.current_meds);
     setVal("diagnosisTA",    view.diagnosis);
     setVal("medicationsTA",  view.medications);
     setVal("instructionsTA", view.instructions);
