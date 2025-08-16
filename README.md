@@ -27,18 +27,18 @@ EchoVisit bridges this gap. By combining transcription, summarization, simplific
 --- 
 
 # Features
-1. Doctor Portal
+##1. Doctor Portal
 - **Record a short audio note after each visit.**
 - **AI agents transcribe, structure into EMR fields, flag abnormal vitals, and check drug interactions.**
 - **Doctor reviews and approves before sending to patient.**
 
-2. Patient Portal
+##2. Patient Portal
 - **View summaries simplified into layman’s terms.**
 - **Translate instantly into multiple languages.**
 - **Access AI-generated follow-up questions.**
 - **Chat with an Interactive Q&A Agent for visit-specific answers.**
 
-3. Agentic AI Pipeline
+##3. Agentic AI Pipeline
 - **Summarization Agent** → EMR-ready structured notes.
 - **Simplification Agent** → Jargon-free, patient-friendly language.
 - **Translation Agent** → Multi-language support.
@@ -54,7 +54,7 @@ EchoVisit bridges this gap. By combining transcription, summarization, simplific
 **AI Agents:** Built and prompt-tuned in IBM watsonx.ai (Granite-3-3-8b-instruct)
 **Agentic AI:** Orchestrated pipeline with fallbacks (e.g., if Q&A agent is uncertain, patient is prompted to ask their doctor).
 
-Datasets:
+##Datasets:
 - **Medical glossary for simplification.**
 - **EMR-compatible schema for structuring visit data.**
 - **Common health questions dataset for improving Q&A accuracy.**
@@ -62,7 +62,6 @@ Datasets:
 ---
 
 # Conclusion
-
 EchoVisit is the foundation of something bigger. We imagine this platform not only supporting doctors in their daily workflows but also extending into ambulance settings, where EMTs could use it for rapid, on-scene entry of electronic medical records. By turning complex notes into clear, structured, and patient-friendly summaries, EchoVisit reduces burnout for providers and gives patients the understanding they need to take control of their care.
 
 While this version is a proof-of-concept, the potential of watsonx.ai makes us confident that EchoVisit can continue to grow into a scalable solution for healthcare communication.
