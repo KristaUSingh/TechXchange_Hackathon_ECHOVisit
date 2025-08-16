@@ -51,10 +51,10 @@ EchoVisit bridges this gap. By combining transcription, summarization, simplific
 ---
 
 # Technical Overview
-**Backend:** Flask, Supabase (PostgreSQL with row-level security & auth).
-**Transcription:** OpenAI Whisper
-**AI Agents:** Built and prompt-tuned in IBM watsonx.ai (Granite-3-3-8b-instruct)
-**Agentic AI:** Orchestrated pipeline with fallbacks (e.g., if Q&A agent is uncertain, patient is prompted to ask their doctor).
+- **Backend:** Flask, Supabase (PostgreSQL with row-level security & auth).
+- **Transcription:** OpenAI Whisper
+- **AI Agents:** Built and prompt-tuned in IBM watsonx.ai (Granite-3-3-8b-instruct)
+- **Agentic AI:** Orchestrated pipeline with fallbacks (e.g., if Q&A agent is uncertain, patient is prompted to ask their doctor).
 
 ## Datasets:
 - Medical glossary for simplification.
