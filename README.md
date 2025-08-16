@@ -3,7 +3,7 @@
 <img width="250" height="250" alt="Image" src="https://github.com/user-attachments/assets/50c2a6e3-fab4-4082-96e8-5fef510f6dcf" />
 </div>
 
-Explains the work done by our team, **Beavers Intelligence Unit**, for the **2025 IBM TechXchange Pre-Conference watsonx Hackathon**. The goal of the hackathon is to utilize agentic AI to develop an innovative solution to a real-world, everyday problem. This project was completed using JavaScript, CSS, and HTML for the front end, and Python's Flask for the backend. 
+Explains the work done by our team, **Beaver Intelligence Unit**, for the **2025 IBM TechXchange Pre-Conference watsonx Hackathon**. The goal of the hackathon is to utilize agentic AI to develop an innovative solution to a real-world, everyday problem. This project was completed using JavaScript, CSS, and HTML for the front end, and Python's Flask for the backend. 
 
 
 # Video - Click on Thumbnail to Watch
