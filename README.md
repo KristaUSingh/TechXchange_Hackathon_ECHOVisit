@@ -4,7 +4,7 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 It consists of **two connected portals**: one for **Doctors** and one for **Patients**, built to ensure seamless interaction with the backend services and Watsonx AI agents.  
 
 
-## ⚙️ Technologies Used
+## Technologies Used
 - **HTML5 / CSS3 / JavaScript (Vanilla)**: Core web technologies for structure, style, and interactivity
 - **Flask (backend connection)**: REST API calls to connect with backend endpoints
 - **IBM Watsonx AI**: Powers transcription, summarization, simplification, translation, and Q&A (via backend)
