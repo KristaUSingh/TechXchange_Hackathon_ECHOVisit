@@ -24,7 +24,8 @@ ECHOVisit consists of two portals: one for patients and another for healthcare p
 - Patients can see their visit summary
 > They can see their allergies, symptoms, instructions, etc.
 - Patients can simplify the transcription
-- Patients can translate the summary 
+- Patients can translate the summary
+> Languages Available Currently: Spanish, French, & German
 3. Questions
 - Patient can generate follow-up questions
-- **Integrated Chatbot** that provides patients with simple answers to any questions they may have
+- **AI Agent** that provides patients with simple answers to any questions they may have
