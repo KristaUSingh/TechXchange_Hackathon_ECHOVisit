@@ -19,7 +19,7 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 ### Doctor Login
 - Secure login via email + password
   - If they don't have an account, doctors can create one with name, email, clinic name, and password 
-- Integrated with Supabase Auth  
+- Integrated with Supabase Authenthication  
 
 ### Basic Information Entry
 - Doctors fill in patient details (name, birthday, phone number, etc.)
@@ -27,12 +27,17 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 - Medication + new prescriptions entry  
 - **Smart Alerts**:  
   - BMI & blood pressure flagged if outside normal range  
-  - Severity of drug interactions flagged between patient's current and newly prescribed medications (via backend Drug Interaction AI agent)  
+  - Severity of drug interactions flagged between patient's current and newly prescribed medications (via backend Drug Interaction AI agent)
+<img width="1437" height="377" alt="Screenshot 2025-08-16 at 10 32 56 PM" src="https://github.com/user-attachments/assets/2f0f7517-476f-42ac-8fc5-9cbcc668b638" />
+<img width="1438" height="531" alt="Screenshot 2025-08-16 at 10 33 13 PM" src="https://github.com/user-attachments/assets/224a08fd-591c-415f-a422-c1bb8381f62c" />
 
+  
 ### Verbal Summary
 - Record a short audio note directly in the portal  
 - Audio → automatically **transcribed** (Whisper)
-<img width="1440" height="678" alt="Screenshot 2025-08-15 at 4 22 26 PM" src="https://github.com/user-attachments/assets/dfdd165d-bce2-4669-8ac7-baab7a85eb58" />
+<img width="2880" height="1554" alt="image" src="https://github.com/user-attachments/assets/447bac4d-dd35-4d8e-8711-9d665cec2a7d" />
+
+
 - Transcription → sent to **Watsonx Summarization Agent**  
 - Organized into categories: **Symptoms, Diagnosis, Medications, Follow-up Instructions, Additional Notes**
 
@@ -59,12 +64,15 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 
 ### Translation
 - **Watsonx Translation Agent** translates summaries into supported languages  
-- **Currently Supported**: Spanish, French, German  
+- **Currently Supported**: Spanish, French, German
+<img width="2880" height="1554" alt="image" src="https://github.com/user-attachments/assets/bce0a2fe-6773-4446-bd62-5434ea43d7b2" />
+
 
 ### Patient Questions 
 - Patients can ask clarifying questions about their care in simple language
 - **Watsonx Follow-Up Question Agent** generated suggested questions that the patient can ask based on their visit 
 - **Watsonx Interactive Q&A Agent** provides answers to patient questions via chat
+<img width="1440" height="273" alt="Screenshot 2025-08-15 at 4 23 16 PM" src="https://github.com/user-attachments/assets/039e0e81-f543-4376-95fa-9f3ac6740374" />
 <img width="1440" height="721" alt="Screenshot 2025-08-15 at 4 23 32 PM" src="https://github.com/user-attachments/assets/e89613e6-d177-4c7a-bd7c-349efe2b0764" />
 
 
