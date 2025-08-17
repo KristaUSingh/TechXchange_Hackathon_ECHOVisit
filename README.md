@@ -1,7 +1,8 @@
 # ECHOVisit Frontend
 
-The **ECHOVisit Frontend** provides an intuitive web-based interface for both healthcare providers and patients.  
-It consists of **two connected portals**: one for **Doctors** and one for **Patients**, built to ensure seamless interaction with the backend services and Watsonx AI agents.  
+<img width="1440" height="482" alt="Screenshot 2025-08-16 at 10 22 16 PM" src="https://github.com/user-attachments/assets/c05170ee-200f-475e-8b00-f9e2ac2310f0" />
+
+The **ECHOVisit Frontend** provides an intuitive web-based interface for both healthcare providers and patients. It consists of **two connected portals**: one for **Doctors** and one for **Patients**, built to ensure seamless interaction with the backend services and Watsonx AI agents.  
 
 
 ## Technologies Used
@@ -30,7 +31,8 @@ It consists of **two connected portals**: one for **Doctors** and one for **Pati
 
 ### Verbal Summary
 - Record a short audio note directly in the portal  
-- Audio → automatically **transcribed** (Whisper)  
+- Audio → automatically **transcribed** (Whisper)
+<img width="1440" height="678" alt="Screenshot 2025-08-15 at 4 22 26 PM" src="https://github.com/user-attachments/assets/dfdd165d-bce2-4669-8ac7-baab7a85eb58" />
 - Transcription → sent to **Watsonx Summarization Agent**  
 - Organized into categories: **Symptoms, Diagnosis, Medications, Follow-up Instructions, Additional Notes**
 
@@ -63,7 +65,8 @@ It consists of **two connected portals**: one for **Doctors** and one for **Pati
 - Patients can ask clarifying questions about their care in simple language
 - **Watsonx Follow-Up Question Agent** generated suggested questions that the patient can ask based on their visit 
 - **Watsonx Interactive Q&A Agent** provides answers to patient questions via chat
-  
+<img width="1440" height="721" alt="Screenshot 2025-08-15 at 4 23 32 PM" src="https://github.com/user-attachments/assets/e89613e6-d177-4c7a-bd7c-349efe2b0764" />
+
 
 ## User Flow Summary
 
