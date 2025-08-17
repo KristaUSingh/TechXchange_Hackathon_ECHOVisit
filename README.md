@@ -35,11 +35,12 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 ### Verbal Summary
 - Record a short audio note directly in the portal  
 - Audio → automatically **transcribed** (Whisper)
-<img width="2880" height="1554" alt="image" src="https://github.com/user-attachments/assets/447bac4d-dd35-4d8e-8711-9d665cec2a7d" />
-
+<img width="2880" height="1554" alt="image" src="https://github.com/user-attachments/assets/29781ba6-d04b-4f7d-9104-6a8e0383b037" />
 
 - Transcription → sent to **Watsonx Summarization Agent**  
 - Organized into categories: **Symptoms, Diagnosis, Medications, Follow-up Instructions, Additional Notes**
+<img width="2880" height="1554" alt="image" src="https://github.com/user-attachments/assets/4b0e8c77-20a4-42b2-934a-2080c6823fb6" />
+
 
 ### Review & Submit
 - Doctor can **review, edit, or approve** structured categories  
