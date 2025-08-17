@@ -43,7 +43,7 @@ It consists of **two connected portals**: one for **Doctors** and one for **Pati
 
 ### Patient Login
 - Secure login via email + password
-  - - If they don't have an account, doctors can create one with name, email, date of birth, and password  
+  - If they don't have an account, doctors can create one with name, email, date of birth, and password  
 - Patients select a visit to review  
 
 ### Reviewing Notes
