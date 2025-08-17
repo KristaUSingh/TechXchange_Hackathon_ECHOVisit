@@ -4,6 +4,7 @@ ECHOVisit consists of two portals: one for patients and another for healthcare p
 ## Doctor Portal
 1. Doctor Login
 - Doctors must log in with their email and password
+> **or sign up** if they don't already have one
 2. Basic Information
 - Doctors manually fill in the patient's basic information such as their name, phone number, etc.
 - Doctors also include the patient's vitals, medications, and new prescriptions
@@ -18,6 +19,7 @@ ECHOVisit consists of two portals: one for patients and another for healthcare p
 ## Patient Portal
 1. Patient Login
 - Patient must log in using their email and password
+>  **or sign up** if they don't already have one
 - They must select the doctor visit that they want to access
 2. Reviewing Notes
 - Patients have access to the doctor's recording and the text transcription
