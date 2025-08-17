@@ -1,0 +1,38 @@
+
+
+CREATE_DOCTOR_TABLE = """
+CREATE TABLE IF NOT EXISTS doctors (
+id SERIAL PRIMARY KEY,
+user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,  -- Supabase Auth link,
+name VARCHAR(255),
+office VARCHAR(255),
+email VARCHAR(255) UNIQUE NOT NULL,
+password TEXT
+);
+"""
+
+CREATE_PATIENT_TABLE = """
+CREATE TABLE IF NOT EXISTS patients(
+id SERIAL PRIMARY KEY,
+user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,  -- Supabase Auth link,
+name VARCHAR(255),
+email VARCHAR(255) UNIQUE NOT NULL,
+password TEXT
+);
+"""
+
+CREATE_VISIT_TABLE = """
+CREATE TABLE IF NOT EXISTS visits(
+id SERIAL PRIMARY KEY,
+patient_id INT REFERENCES patients(id) ON DELETE CASCADE,
+doctor_id INT REFERENCES doctors(id) ON DELETE CASCADE,
+visit_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+summary TEXT,
+transcript TEXT,
+audio_url TEXT
+);
+"""
+
+
+
+

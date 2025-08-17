@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Voice Recorder - Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    button {
+      margin-right: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+    }
+    #result {
+      margin-top: 2rem;
+      white-space: pre-wrap;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎙️ Record Your Summary</h2>
+
+  <button id="start">Start Recording</button>
+  <button id="stop" disabled>Stop Recording</button>
+
+  <p><strong>Playback:</strong></p>
+  <audio id="audioPlayback" controls></audio>
+
+  <div id="result">Transcript output will appear here after upload...</div>
+
+  <script src="recorder.js"></script>
+</body>
+</html>
