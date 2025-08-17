@@ -18,6 +18,8 @@ https://vimeo.com/1110564140
 
 ECHOVisit is a web-based platform, powered by IBM watsonx.ai Granite model, that transforms complex medical notes into clear, patient-friendly visit summaries. With two connected portals—one for doctors and one for patients—EchoVisit helps doctors save time on documentation while giving patients the clarity they deserve about their health.
 
+We built ECHOVisit for the Build with Agentic AI challenge using IBM watsonx to solve one of healthcare’s most everyday problems: patients leaving confused after their doctor visits. Our proof-of-concept is a working web platform with two portals. On the doctor side, a verbal summary is transcribed and processed by a chain of watsonx-powered agents that extract key details, flag abnormal vitals and drug interactions, and structure everything into EMR fields. On the patient side, those same agents simplify the summary into layman’s terms, translate it into multiple languages, and power an interactive Q&A so patients can ask follow-up questions. Unlike a single chatbot, our solution decomposes the workflow into six specialized agents working together with autonomy and fallback logic, making medical communication both efficient and accessible. With ECHOVisit, doctors save time, patients gain clarity, and agentic AI closes a critical gap in everyday healthcare.
+
 
 # Why is ECHOVisit Useful?
 Medical communication is broken:
