@@ -5,7 +5,7 @@ It consists of **two connected portals**: one for **Doctors** and one for **Pati
 
 
 ## Technologies Used
-- **HTML5 / CSS3 / JavaScript (Vanilla)**: Core web technologies for structure, style, and interactivity
+- **HTML / CSS / JavaScript (Vanilla)**: Core web technologies for structure, style, and interactivity
 - **Flask (backend connection)**: REST API calls to connect with backend endpoints
 - **IBM Watsonx AI**: Powers transcription, summarization, simplification, translation, and Q&A (via backend)
 - **Supabase**: Used for authentication and database access (patient/doctor accounts, visit storage)
