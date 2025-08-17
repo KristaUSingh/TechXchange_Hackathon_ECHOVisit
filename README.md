@@ -96,5 +96,7 @@ The **ECHOVisit Frontend** provides an intuitive web-based interface for both he
 
 ## Design & Usability
 - **Calm Healthcare Palette**:  
-  - Teal (#006D77), Mint (#83C5BE), Off-white (#EDF6F9), Coral (#FFDDD2), Deep Gray (#333)  
+  - Teal (#006D77), Off-white (#EDF6F9), Coral (#FFDDD2), Mint (#83C5BE), Deep Gray (#333)
+<img width="600" height="1800" alt="image" src="https://github.com/user-attachments/assets/8ccc3ab8-69de-4b8c-8675-3b1db05d9e2f" />
+
 - **Accessibility-first**: Large text, simple navigation, clear labels  
