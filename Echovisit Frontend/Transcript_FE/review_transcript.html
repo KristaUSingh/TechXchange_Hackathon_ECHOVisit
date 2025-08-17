@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Review Transcription - EchoVisit</title>
+  <link rel="stylesheet" href="review_transcript.css" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="../logo/4.png" alt="EchoVisit Logo" class="logo" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="../Home_FE/home.html">HOME</a></li>
+        <li><a href="../Home_FE/home.html#about">ABOUT US</a></li>
+        <li><a href="../Home_FE/home.html#features">FEATURES</a></li>
+        <li><a href="../Home_FE/home.html#contact">CONTACT</a></li>
+        <li><a href="../Doc_or_Patient_FE/doc_or_patient.html">SIGN IN</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="review-container">
+
+        <!-- Media + transcript block (inserted before the review blurb) -->
+    <div>
+      <label for="visit-name">ENTER VISIT SUMMARY NAME:</label>
+      <input type="text" id="visit-name" required/>
+    </div>
+
+    <p id="reviewBlurb">HERE’S YOUR RECORDING & TRANSCRIPTION:</p><br>
+    <div id="playbackWrap" class="media-block" hidden>
+      <audio id="reviewAudio" controls></audio>
+    </div>
+
+    <div id="transcriptionWrap" class="media-block" hidden>
+      <label class="media-label">Transcription</label>
+      <textarea id="rawTranscript" rows="6" class="media-textarea"></textarea>
+    </div>
+
+    <hr class="section-line">  
+
+    <p id="reviewHeader">PLEASE REVIEW BEFORE SUBMITTING:</p>
+
+    <form class="review-form">
+      <label>ALLERGIES:</label>
+      <div class="decision-buttons" data-target="allergiesTA"></div>
+      <textarea id="allergiesTA"></textarea>
+
+      <label>SYMPTOMS:</label>
+      <div class="decision-buttons" data-target="symptomsTA"></div>
+      <textarea id="symptomsTA"></textarea>
+
+      <label>DIAGNOSIS:</label>
+      <div class="decision-buttons" data-target="diagnosisTA"></div>
+      <textarea id="diagnosisTA"></textarea>
+
+      <label>MEDICATIONS:</label>
+      <div class="decision-buttons" data-target="medicationsTA"></div>
+      <textarea id="medicationsTA"></textarea>
+
+      <label>INSTRUCTIONS:</label>
+      <div class="decision-buttons" data-target="instructionsTA"></div>
+      <textarea id="instructionsTA"></textarea>
+
+      <label>ADDITIONAL NOTES:</label>
+      <div class="decision-buttons" data-target="notesTA"></div>
+      <textarea id="notesTA"></textarea>
+
+
+
+      <button type="button" id="submit-btn">CONTINUE ></button>
+ 
+      <!-- <button class="submit-btn">CONTINUE --&gt;</button> -->
+    </form>
+  </main>
+
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <p><strong>ARE YOU SURE YOU WANT TO SUBMIT<br>TO PATIENT’S PORTAL?</strong></p>
+    <div class="modal-buttons">
+      <button id="confirmYes">YES</button>
+      <button id="confirmNo">NO</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success / Submitted Modal -->
+<div id="successModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+  <div class="modal-content modal-success">
+    <p id="successTitle"><strong>YOUR SUMMARY HAS BEEN SUBMITTED!</strong></p>
+    <div class="modal-buttons">
+      <button id="goMenuBtn">GO TO HOME PAGE</button>
+      <button id="signOutBtn">SIGN OUT</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="./review_transcript.js"></script>
+  
+
+</body>
+</html>

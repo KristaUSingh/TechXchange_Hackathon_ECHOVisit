@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Portal - EchoVisit</title>
+  <link rel="stylesheet" href="doctor-intake.css" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="../logo/4.png" alt="EchoVisit Logo" class="logo" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="../Home_FE/home.html">HOME</a></li>
+        <li><a href="../Home_FE/home.html#about">ABOUT US</a></li>
+        <li><a href="../Home_FE/home.html#features">FEATURES</a></li>
+        <li><a href="../Home_FE/home.html#contact">CONTACT</a></li>
+        <li><a href="../Doc_or_Patient_FE/doc_or_patient.html">SIGN IN</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>WELCOME ECHO!</h1>
+    <p class="subtitle">Please enter the patient details below:</p>
+
+    <form id="patientForm" class="form-grid">
+      <h2>BASIC INFORMATION:</h2>
+      <div>
+        <label for="first-name">First Name:</label>
+        <input type="text" id="first-name" required/>
+      </div>
+      <div>
+        <label for="middle-name">Middle Name:</label>
+        <input type="text" id="middle-name" />
+      </div>
+      <div>
+        <label for="last-name">Last Name:</label>
+        <input type="text" id="last-name" required/>
+      </div>
+      <div>
+        <label for="visit-date">Date of Birth:</label>
+        <input type="date" id="patientDOB" required/>
+      </div>
+      <div>
+        <label for="address">Address:</label>
+        <input type="text" id="address" required/>
+      </div>
+      <div>
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" required/>
+      </div>
+      <div>
+        <label for="email">Email: </label>
+        <input type="text" id="patientEmail" required/>
+      </div>
+      <div>
+        <label for="insurance">Insurance ID:</label>
+        <input type="text" id="insurance" required/>
+      </div>
+
+      <hr/>
+
+      <h2>VITALS:</h2>
+      <div>
+        <label for="visit-date">Date of Visit:</label>
+        <input type="date" id="visit-date" required/>
+      </div>
+
+      <div>
+        <label for="bp-sys">Blood Pressure:</label>
+        <div class="input-like" id="bp-wrap">
+          <input type="number" id="bp-sys" min="50" max="250" step="1" placeholder="SYS" required />
+          <span>/</span>
+          <input type="number" id="bp-dia" min="30" max="150" step="1" placeholder="DIA" required />
+          <span>mmHg</span>
+        </div>
+        <div id="bp-indicator" class="bmi-indicator" aria-live="polite"></div>
+      
+        <!-- hidden fields for backend -->
+        <input type="hidden" id="bp-systolic"  name="systolic">
+        <input type="hidden" id="bp-diastolic" name="diastolic">
+        <input type="hidden" id="bp-category"  name="bp_category">
+      </div>
+      
+
+      <div>
+        <label for="height-feet">Height:</label>
+        <div class="input-like height-combo">
+          <select id="height-feet" name="height_feet" required>
+            <option value="" disabled selected>ft</option>
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select>
+          <span>ft</span>
+          <select id="height-inches" name="height_inches" required>
+            <option value="" disabled selected>in</option>
+            <option>0</option><option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option><option>7</option>
+            <option>8</option><option>9</option><option>10</option><option>11</option>
+          </select>
+          <span>in</span>
+        </div>
+      </div>
+      
+      <div>
+        <label for="weight">Weight:</label>
+        <div class="input-like" id="weight-wrap">
+          <input type="number" id="weight" min="0" step="0.1" placeholder="e.g., 150" required />
+          <select id="weight-unit" aria-label="weight unit">
+            <option value="lb" selected>lb</option>
+            <option value="kg">kg</option>
+          </select>
+        </div>
+      </div>
+      
+      <div>
+        <label for="bmi">BMI:</label>
+        <input type="text" id="bmi" placeholder="Auto" readonly />
+        <div id="bmi-indicator" class="bmi-indicator" aria-live="polite"></div>
+      </div>
+      
+      <!-- hidden normalized values for backend if you want them -->
+      <input type="hidden" id="height-cm" name="height_cm" />
+      <input type="hidden" id="weight-kg" name="weight_kg" />
+      
+      <hr>
+      <h2>MEDICATIONS:</h2>
+      <div>
+        <label>Current Medications:</label>
+                <!-- chips -->
+        <div id="meds-chips" class="meds-chips" aria-live="polite">
+          <div class="meds-empty">No medications added.</div>
+        </div>
+
+        <!-- launcher button (visible by default) -->
+        <button type="button" id="med-launch" class="submit-btn" style="width:auto; margin:8px 0 14px;">
+          + Add Medication
+        </button>
+      
+        <!-- entry row (hidden initially) -->
+        <div class="meds-row hidden" id="meds-entry" hidden>
+          <div class="meds-field">
+            <label class="meds-sublabel">Name</label>
+            <input type="text" id="med-name-input" placeholder="e.g., Lisinopril" />
+          </div>
+          <div class="meds-field">
+            <label class="meds-sublabel">Dose</label>
+            <input type="text" id="med-dose-input" placeholder="e.g., 10 mg" />
+          </div>
+          <div class="meds-field full">
+            <label class="meds-sublabel">Frequency</label>
+            <div class="meds-inline">
+              <input type="text" id="med-freq-input" placeholder="e.g., daily" />
+              <button type="button" id="med-add-btn" class="submit-btn">Add</button>
+            </div>
+          </div>
+        </div>
+      
+      
+        <!-- hidden fields for backend -->
+        <input type="hidden" id="current-meds-json"  name="current_meds_json" />
+        <input type="hidden" id="current-meds-list"  name="current_meds_list" />
+      </div>
+      
+      <!-- NEW: meds prescribed after this visit -->
+      <div>
+        <label>New Medications Prescribed After Visit:</label>
+
+        <!-- chips -->
+        <div id="newmeds-chips" class="meds-chips" aria-live="polite">
+          <div class="meds-empty">No new prescriptions added.</div>
+        </div>
+
+        <!-- launcher -->
+        <button type="button" id="newmed-launch" class="submit-btn" style="width:auto; margin:8px 0 14px;">
+          + Add New Medication
+        </button>
+
+        <!-- entry row (hidden initially) -->
+        <div class="meds-row hidden" id="newmeds-entry" hidden>
+          <div class="meds-field">
+            <label class="meds-sublabel">Name</label>
+            <input type="text" id="newmed-name-input" placeholder="e.g., Amoxicillin" />
+          </div>
+          <div class="meds-field">
+            <label class="meds-sublabel">Dose</label>
+            <input type="text" id="newmed-dose-input" placeholder="e.g., 500 mg" />
+          </div>
+          <div class="meds-field full">
+            <label class="meds-sublabel">Frequency</label>
+            <div class="meds-inline">
+              <input type="text" id="newmed-freq-input" placeholder="e.g., twice daily" />
+              <button type="button" id="newmed-add-btn" class="submit-btn">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- hidden fields for backend (optional) -->
+        <input type="hidden" id="new-meds-json"  name="new_meds_json" />
+        <input type="hidden" id="new-meds-list"  name="new_meds_list" />
+      </div>
+
+      <!-- NEW: interaction results panel -->
+      <div id="interaction-result" class="bmi-indicator" style="margin-top:10px;" aria-live="polite"></div>
+
+      <button type="submit" class="submit-btn">CONTINUE ></button>
+    </form>
+  </main>
+
+  <script src="./doctor_intake.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EchoVisit - Doctor SignUp</title>
+  <link rel="stylesheet" href="doc_sign_up.css" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="../logo/4.png" alt="EchoVisit Logo" class="logo" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="../Home_FE/home.html">HOME</a></li>
+        <li><a href="../Home_FE/home.html#about">ABOUT US</a></li>
+        <li><a href="../Home_FE/home.html#features">FEATURES</a></li>
+        <li><a href="../Home_FE/home.html#contact">CONTACT</a></li>
+        <li><a href="../Doc_or_Patient_FE/doc_or_patient.html" class="signup">SIGN IN</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="form-wrapper">
+      <form class="form">
+        <h2 id="heading"> DOCTOR SIGN UP</h2>
+        <div class="field">
+          <input id="firstName" placeholder="FIRST NAME" class="input-field" type="text" />
+        </div>
+
+        <div class="field">
+          <input id="lastName" placeholder="LAST NAME" class="input-field" type="text" />
+        </div>
+
+        <div class="field">
+          <input id="clinic" placeholder="CLINIC" class="input-field" type="text" />
+        </div>
+
+        <div class="field">
+          <input id="email" placeholder="EMAIL" class="input-field" type="email" />
+        </div>
+
+        <div class="field">
+          <input id="password" placeholder="PASSWORD" class="input-field" type="password" />
+        </div>
+
+        <label class="checkbox-wrapper">
+        <input type="checkbox" />
+        <div class="checkmark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              d="M20 6L9 17L4 12"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </div>
+        <span class="label">I am not a robot</span>
+      </label>
+        <!-- From Uiverse.io by niat786 --> 
+        <button id="doctorSignupBtn" type="button" class="button3">
+          CONTINUE AS A DOCTOR
+        </button>
+    </div>
+
+      </form>
+    </div>
+  </main>
+
+   <footer></footer>
+
+   <script src="./doc_sign_up.js"></script>
+</body>
+</html>

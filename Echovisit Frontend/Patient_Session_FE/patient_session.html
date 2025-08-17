@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose a Session – EchoVisit</title>
+  <link rel="stylesheet" href="../Patient_Session_FE/patient_session.css" />
+</head>
+<body>
+  <!-- Navbar (same as your other pages) -->
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="../logo/4.png" alt="EchoVisit Logo" class="logo" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="../Home_FE/home.html">HOME</a></li>
+        <li><a href="../Home_FE/home.html#about">ABOUT US</a></li>
+        <li><a href="../Home_FE/home.html#features">FEATURES</a></li>
+        <li><a href="../Home_FE/home.html#contact">CONTACT</a></li>
+        <li><a href="../Doc_or_Patient_FE/doc_or_patient.html">SIGN IN</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Welcome, Echo!</h1>
+    <p class="subtitle">Choose a visit to view its summary & notes:</p>
+
+    <section class="toolbar">
+      <input id="search" type="text" placeholder="Search by provider, clinic, or notes…" />
+      <div class="filters">
+        <button class="chip active" data-range="all">All</button>
+        <button class="chip" data-range="30">Last 30 days</button>
+        <button class="chip" data-range="90">Last 90 days</button>
+        <button class="chip" data-range="365">Last year</button>
+      </div>
+    </section>
+
+    <section id="grid" class="grid">
+      <!-- Visit cards will be inserted here -->
+    </section>
+    
+  </main>
+
+
+  <script src="./patient_session.js"></script>
+</body>
+</html>
